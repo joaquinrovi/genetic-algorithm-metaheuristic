@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>utils.model_utils &mdash; Modelo_portafolio 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Modelo_portafolio
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Modelo_portafolio</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">utils.model_utils</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for utils.model_utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">random</span> <span class="k">as</span> <span class="nn">rd</span>
+
+
+<div class="viewcode-block" id="append_column_solution">
+<a class="viewcode-back" href="../../utils.html#utils.model_utils.append_column_solution">[docs]</a>
+<span class="k">def</span> <span class="nf">append_column_solution</span><span class="p">(</span>
+        <span class="n">df_optional</span><span class="p">,</span>
+        <span class="n">df_mandatory</span><span class="p">,</span>
+        <span class="n">df_zeros</span><span class="p">,</span>
+        <span class="n">df_semi_mandatory</span><span class="p">,</span>
+        <span class="n">portfolios</span><span class="p">,</span>
+        <span class="n">portfolios_semi_mandatory</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function that joins the portfolios of the optional projects and appends the mandatory and</span>
+<span class="sd">    vpn zero projects, while adding some columns that improve the understanding of the results DataFrame.</span>
+<span class="sd">    The returned df of this function is later stored as a table</span>
+
+<span class="sd">    :param df_optional: DataFrame with the optional projects evaluated by the model</span>
+<span class="sd">    :type df_optional: DataFrame</span>
+<span class="sd">    :param df_mandatory: DataFrame with the mandatory projects</span>
+<span class="sd">    :type df_mandatory: DataFrame</span>
+<span class="sd">    :param df_zeros: DataFrame with the vpn zero projects</span>
+<span class="sd">    :type df_zeros: DataFrame</span>
+<span class="sd">    :param df_semi_mandatory: DataFrame with the df_semi_mandatory projects</span>
+<span class="sd">    :type df_semi_mandatory: DataFrame</span>
+<span class="sd">    :param portfolios: list with the different portfolios generated by the model</span>
+<span class="sd">    :type config: list</span>
+<span class="sd">    :param portfolios_semi_mandatory: list with the different portfolios generated by the model for semi_mandatory</span>
+<span class="sd">    projects</span>
+<span class="sd">    :type config: list</span>
+
+<span class="sd">    Return: DataFrame with all the projects and portfolios generated by the model</span>
+<span class="sd">    :rtype DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;MATRICULA_DIGITAL&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;NOMBRE_PROYECTO&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ACTIVO&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;EMPRESA&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;TIPO_DE_INVERSION&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;FASE_EN_CURSO&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;SEGMENTO&quot;</span>
+    <span class="p">]</span>
+
+    <span class="n">df1</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">df_optional</span><span class="p">[</span><span class="n">columns</span><span class="p">]</span>
+        <span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;MATRICULA_DIGITAL&quot;</span><span class="p">,</span> <span class="s2">&quot;NOMBRE_PROYECTO&quot;</span><span class="p">],</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">min</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="n">df2</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">df_mandatory</span><span class="p">[</span><span class="n">columns</span><span class="p">]</span>
+        <span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;MATRICULA_DIGITAL&quot;</span><span class="p">,</span> <span class="s2">&quot;NOMBRE_PROYECTO&quot;</span><span class="p">],</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">min</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="n">df3</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">df_zeros</span><span class="p">[</span><span class="n">columns</span><span class="p">]</span>
+        <span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;MATRICULA_DIGITAL&quot;</span><span class="p">,</span> <span class="s2">&quot;NOMBRE_PROYECTO&quot;</span><span class="p">],</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">min</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="n">df4</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">df_semi_mandatory</span><span class="p">[</span><span class="n">columns</span><span class="p">]</span>
+        <span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;MATRICULA_DIGITAL&quot;</span><span class="p">,</span> <span class="s2">&quot;NOMBRE_PROYECTO&quot;</span><span class="p">],</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">min</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="c1"># df5 = pd.DataFrame({&quot;MATRICULA_DIGITAL&quot;: [&quot;FITNESS&quot;]})</span>
+    <span class="n">df5</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;MATRICULA_DIGITAL&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;grb-portafolio_1&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;grc-portafolio_1&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;grb-portafolio_2&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;grc-portafolio_2&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;grb-portafolio_3&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;grc-portafolio_3&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;grb-portafolio_4&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;grc-portafolio_4&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;grb-portafolio_5&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;grc-portafolio_5&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;grb-portafolio_6&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;grc-portafolio_6&quot;</span><span class="p">,</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;PORTAFOLIO_1&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s2">&quot;PORTAFOLIO_2&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s2">&quot;PORTAFOLIO_3&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s2">&quot;PORTAFOLIO_4&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s2">&quot;PORTAFOLIO_5&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s2">&quot;PORTAFOLIO_6&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+    <span class="n">mid_portfolios</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">14</span><span class="p">)]</span>
+    <span class="n">df6</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+        <span class="s2">&quot;MATRICULA_DIGITAL&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="sa">f</span><span class="s2">&quot;MID</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">14</span><span class="p">)</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;PORTAFOLIO_1&quot;</span><span class="p">:</span> <span class="n">mid_portfolios</span><span class="p">,</span>
+        <span class="s2">&quot;PORTAFOLIO_2&quot;</span><span class="p">:</span> <span class="n">mid_portfolios</span><span class="p">,</span>
+        <span class="s2">&quot;PORTAFOLIO_3&quot;</span><span class="p">:</span> <span class="n">mid_portfolios</span><span class="p">,</span>
+        <span class="s2">&quot;PORTAFOLIO_4&quot;</span><span class="p">:</span> <span class="n">mid_portfolios</span><span class="p">,</span>
+        <span class="s2">&quot;PORTAFOLIO_5&quot;</span><span class="p">:</span> <span class="n">mid_portfolios</span><span class="p">,</span>
+        <span class="s2">&quot;PORTAFOLIO_6&quot;</span><span class="p">:</span> <span class="n">mid_portfolios</span>
+    <span class="p">}</span>
+    <span class="p">)</span>
+
+    <span class="n">df_con</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df1</span><span class="p">,</span> <span class="n">df2</span><span class="p">,</span> <span class="n">df3</span><span class="p">,</span> <span class="n">df4</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">zeros</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">portfolios</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">df3</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="n">ones</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">portfolios</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">df2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="n">portfolios_con</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">portfolios</span><span class="p">,</span> <span class="n">ones</span><span class="p">,</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">portfolios_semi_mandatory</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+    <span class="n">df_portfolios</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="n">portfolios_con</span><span class="p">,</span>
+        <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;PORTAFOLIO_</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">portfolios_con</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])],</span>
+    <span class="p">)</span>
+
+    <span class="n">df_con</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df_con</span><span class="p">,</span> <span class="n">df_portfolios</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">df_con</span><span class="p">[</span><span class="s2">&quot;PORTAFOLIO_6&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">df_con</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df_con</span><span class="p">,</span> <span class="n">df5</span><span class="p">,</span> <span class="n">df6</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df_con</span></div>
+
+
+
+<div class="viewcode-block" id="get_down_projects_params">
+<a class="viewcode-back" href="../../utils.html#utils.model_utils.get_down_projects_params">[docs]</a>
+<span class="k">def</span> <span class="nf">get_down_projects_params</span><span class="p">(</span><span class="n">df_down</span><span class="p">,</span> <span class="n">initial</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function that gets downstream refineries attributes</span>
+<span class="sd">    :param df_down: df containing info about refineries</span>
+<span class="sd">    :type df_down: DataFrame</span>
+<span class="sd">    :param initial: Tells if this is an initial run where down and mid are not considered or if it is a normal execution</span>
+<span class="sd">    :type initial: bool</span>
+<span class="sd">    :param config: Dictionary containing config of model</span>
+<span class="sd">    :type config: Dictionary</span>
+
+<span class="sd">    :return: attributes of the refineries by year</span>
+<span class="sd">    :rtype tuple(np.array, np.array, np.array, np.array, np.array)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">initial</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">]),</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">]),</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">]),</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">]),</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">]),</span>
+                <span class="p">)</span>
+
+    <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;MATRICULA_DIGITAL&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;EBITDA&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;CAPEX&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;EMISIONES_NETAS_CO2_ALCANCE_1_Y_2&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;FLUJO_CAJA&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;DIVIDENDO&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;IMPUESTOS&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;LINEA_DE_NEGOCIO&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ACTIVO&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;EMPRESA&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;RANGO_ANIO&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ANIO_INICIAL&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ANIO_FINAL&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df_down</span><span class="p">[</span><span class="n">columns</span><span class="p">]</span>
+
+    <span class="n">df_year</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;RANGO_ANIO&quot;</span><span class="p">)</span>
+    <span class="n">emissions</span> <span class="o">=</span> <span class="n">df_year</span><span class="p">[</span><span class="s2">&quot;EMISIONES_NETAS_CO2_ALCANCE_1_Y_2&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="n">ebitda</span> <span class="o">=</span> <span class="n">df_year</span><span class="p">[</span><span class="s2">&quot;EBITDA&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="n">global_nation</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_year</span><span class="p">[</span><span class="s2">&quot;DIVIDENDO&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span> <span class="n">df_year</span><span class="p">[</span><span class="s2">&quot;IMPUESTOS&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="n">capex</span> <span class="o">=</span> <span class="n">df_year</span><span class="p">[</span><span class="s2">&quot;CAPEX&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="n">flow</span> <span class="o">=</span> <span class="n">df_year</span><span class="p">[</span><span class="s2">&quot;FLUJO_CAJA&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">capex</span><span class="p">,</span> <span class="n">ebitda</span><span class="p">,</span> <span class="n">emissions</span><span class="p">,</span> <span class="n">global_nation</span><span class="p">,</span> <span class="n">flow</span></div>
+
+
+
+<div class="viewcode-block" id="get_mid_projects_params">
+<a class="viewcode-back" href="../../utils.html#utils.model_utils.get_mid_projects_params">[docs]</a>
+<span class="k">def</span> <span class="nf">get_mid_projects_params</span><span class="p">(</span><span class="n">df_mid</span><span class="p">,</span> <span class="n">initial</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function that gets midstream attributes</span>
+
+<span class="sd">    :param df_mid: df containing info about mid</span>
+<span class="sd">    :type df_mid: DataFrame</span>
+<span class="sd">    :param initial: Tells if this is an initial run where down and mid are not considered or if it is a normal execution</span>
+<span class="sd">    :type initial: bool</span>
+<span class="sd">    :param config: Dictionary containing config of model</span>
+<span class="sd">    :type config: Dictionary</span>
+
+<span class="sd">    :return: attributes of the mid by year</span>
+<span class="sd">    :rtype tuple(np.array, np.array, np.array, np.array, np.array)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">initial</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">]),</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">]),</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">]),</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">]),</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">]),</span>
+                <span class="p">)</span>
+    <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;MATRICULA_DIGITAL&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;EBITDA&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;CAPEX&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;EMISIONES_NETAS_CO2_ALCANCE_1_Y_2&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;FLUJO_CAJA&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;DIVIDENDO&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;IMPUESTOS&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;LINEA_DE_NEGOCIO&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ACTIVO&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;EMPRESA&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;RANGO_ANIO&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df_mid</span><span class="p">[</span><span class="n">columns</span><span class="p">]</span>
+    <span class="n">df_year</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;RANGO_ANIO&quot;</span><span class="p">)</span>
+    <span class="n">emissions</span> <span class="o">=</span> <span class="n">df_year</span><span class="p">[</span><span class="s2">&quot;EMISIONES_NETAS_CO2_ALCANCE_1_Y_2&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="n">ebitda</span> <span class="o">=</span> <span class="n">df_year</span><span class="p">[</span><span class="s2">&quot;EBITDA&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="n">capex</span> <span class="o">=</span> <span class="n">df_year</span><span class="p">[</span><span class="s2">&quot;CAPEX&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="n">flujo</span> <span class="o">=</span> <span class="n">df_year</span><span class="p">[</span><span class="s2">&quot;FLUJO_CAJA&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="n">global_nation</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_year</span><span class="p">[</span><span class="s2">&quot;DIVIDENDO&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span> <span class="n">df_year</span><span class="p">[</span><span class="s2">&quot;IMPUESTOS&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">capex</span><span class="p">,</span> <span class="n">ebitda</span><span class="p">,</span> <span class="n">emissions</span><span class="p">,</span> <span class="n">flujo</span><span class="p">,</span> <span class="n">global_nation</span></div>
+
+
+
+<div class="viewcode-block" id="filter_projects">
+<a class="viewcode-back" href="../../utils.html#utils.model_utils.filter_projects">[docs]</a>
+<span class="k">def</span> <span class="nf">filter_projects</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">zero_restriction</span><span class="p">,</span> <span class="n">phase_restriction</span><span class="p">,</span> <span class="n">be_restriction</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to get different dataframes from the input data</span>
+
+<span class="sd">    :param df: DataFrame with the input data</span>
+<span class="sd">    :type df: Dictionary</span>
+<span class="sd">    :param zero_restriction: bool that indicates if zero restriction is on or off</span>
+<span class="sd">    :type zero_restriction: bool</span>
+<span class="sd">    :param phase_restriction: bool that indicates if phase restriction is on or off</span>
+<span class="sd">    :type phase_restriction: bool</span>
+<span class="sd">    :param config: Dictionary containing configs from excel and json</span>
+<span class="sd">    :type config: Dictionary</span>
+<span class="sd">    :param params: Dictionary containing configs from BI</span>
+<span class="sd">    :type params: Dictionary</span>
+
+<span class="sd">    :return</span>
+<span class="sd">    DataFrame: DataFrame with the projects to be evaluated</span>
+<span class="sd">    DataFrame: DataFrame with the projects with vpn negative or zero</span>
+<span class="sd">    DataFrame: DataFrame with the mandatory projects for every portfolio</span>
+<span class="sd">    DataFrame: DataFrame with the semi mandatory projects for every portfolio</span>
+
+<span class="sd">    :rtype tuple(DataFrame, DataFrame, DataFrame, DataFrame)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;ID_PROYECTO&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;MATRICULA_DIGITAL&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;FASE_EN_CURSO&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;MW_INCORPORADOS&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;RANGO_ANIO&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;DURACION&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;EBITDA&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;EMISIONES_NETAS_CO2_ALCANCE_1_Y_2&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;AGUA_NEUTRALIDAD&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;CAPEX&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;TOTAL_R_NACION&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;DIVIDENDO&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;IMPUESTOS&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ANIO_INICIAL&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ANIO_FINAL&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;VPN_PLP_CALCULADO&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;NOMBRE_PROYECTO&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;LINEA_DE_NEGOCIO&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;EBIT&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;CAPITAL_EMPLEADO&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;TIPO_DE_INVERSION&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;OPCION_ESTRATEGICA&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;FLUJO_CAJA&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ACTIVO&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;EMPRESA&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;SEGMENTO&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;EMPLEOS_NP&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ESTUDIANTES&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ACCESO_AGUA_POTABLE&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ACCESO_GAS&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;KM&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;APORTE_EBITDA_ACUM_2040_PROYECTOS_ASOCIADOS_A_CTI&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;B_E_CRUDO&quot;</span>
+    <span class="p">]</span>
+    <span class="n">val_curva_crudo</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;val_curva_crudo&#39;</span><span class="p">])</span>
+    <span class="n">val_curva_crudo</span> <span class="o">=</span> <span class="n">val_curva_crudo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">precio_crudo</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;val_sensi_precio_crudo&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;precio_crudo_</span><span class="si">{</span><span class="n">val_curva_crudo</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]]</span>
+    <span class="n">avg_precio_crudo</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">precio_crudo</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">columns</span><span class="p">]</span>
+    <span class="n">df_no_duration</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;DURACION&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()]</span>
+    <span class="n">df2</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;DURACION&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">df2</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># df2[&quot;APORTE_EBITDA_ACUM_2040_PROYECTOS_ASOCIADOS_A_CTI&quot;] = 40 / df2.shape[0]</span>
+    <span class="c1"># df2[&quot;EMPLEOS_NP&quot;] = 460 / df2.shape[0]</span>
+    <span class="c1"># df2[&quot;ESTUDIANTES&quot;] = 4 / df2.shape[0]</span>
+    <span class="c1"># df2[&quot;ACCESO_AGUA_POTABLE&quot;] = 40 / df2.shape[0]</span>
+    <span class="c1"># df2[&quot;ACCESO_GAS&quot;] = 460 / df2.shape[0]</span>
+    <span class="c1"># df2[&quot;KM&quot;] = 4 / df2.shape[0]</span>
+
+    <span class="n">df_optional</span> <span class="o">=</span> <span class="n">df2</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+        <span class="p">(((</span><span class="n">df2</span><span class="p">[</span><span class="s2">&quot;VPN_PLP_CALCULADO&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
+          <span class="o">&amp;</span> <span class="p">(</span><span class="n">df2</span><span class="p">[</span><span class="s2">&quot;B_E_CRUDO&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">avg_precio_crudo</span><span class="p">))</span>
+         <span class="o">&amp;</span> <span class="p">(</span><span class="o">~</span><span class="n">df2</span><span class="p">[</span><span class="s2">&quot;TIPO_DE_INVERSION&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s2">&quot;ICO - Mto Mayor&quot;</span><span class="p">,</span> <span class="s2">&quot;ICO - Normativo&quot;</span><span class="p">]))</span>
+         <span class="o">&amp;</span> <span class="p">(</span><span class="o">~</span><span class="n">df2</span><span class="p">[</span><span class="s2">&quot;FASE_EN_CURSO&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s2">&quot;Fase 4&quot;</span><span class="p">,</span> <span class="s2">&quot;Fase 5&quot;</span><span class="p">])))</span>
+    <span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="n">df_zeros</span> <span class="o">=</span> <span class="n">df2</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+        <span class="p">((</span><span class="n">df2</span><span class="p">[</span><span class="s2">&quot;VPN_PLP_CALCULADO&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+         <span class="o">&amp;</span> <span class="p">(</span><span class="o">~</span><span class="n">df2</span><span class="p">[</span><span class="s2">&quot;TIPO_DE_INVERSION&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s2">&quot;ICO - Mto Mayor&quot;</span><span class="p">,</span> <span class="s2">&quot;ICO - Normativo&quot;</span><span class="p">]))</span>
+         <span class="o">&amp;</span> <span class="p">(</span><span class="o">~</span><span class="n">df2</span><span class="p">[</span><span class="s2">&quot;FASE_EN_CURSO&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s2">&quot;Fase 4&quot;</span><span class="p">,</span> <span class="s2">&quot;Fase 5&quot;</span><span class="p">])))</span>
+    <span class="p">]</span>
+
+    <span class="n">df_be</span> <span class="o">=</span> <span class="n">df2</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+        <span class="p">((</span><span class="n">df2</span><span class="p">[</span><span class="s2">&quot;B_E_CRUDO&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">avg_precio_crudo</span><span class="p">)</span>
+         <span class="o">&amp;</span> <span class="p">(</span><span class="o">~</span><span class="n">df2</span><span class="p">[</span><span class="s2">&quot;TIPO_DE_INVERSION&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s2">&quot;ICO - Mto Mayor&quot;</span><span class="p">,</span> <span class="s2">&quot;ICO - Normativo&quot;</span><span class="p">]))</span>
+         <span class="o">&amp;</span> <span class="p">(</span><span class="o">~</span><span class="n">df2</span><span class="p">[</span><span class="s2">&quot;FASE_EN_CURSO&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s2">&quot;Fase 4&quot;</span><span class="p">,</span> <span class="s2">&quot;Fase 5&quot;</span><span class="p">])))</span>
+    <span class="p">]</span>
+
+    <span class="n">df_temp</span> <span class="o">=</span> <span class="n">df2</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+        <span class="p">(</span><span class="n">df2</span><span class="p">[</span><span class="s2">&quot;TIPO_DE_INVERSION&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s2">&quot;ICO - Mto Mayor&quot;</span><span class="p">,</span> <span class="s2">&quot;ICO - Normativo&quot;</span><span class="p">]))</span>
+        <span class="o">|</span> <span class="p">(</span><span class="n">df2</span><span class="p">[</span><span class="s2">&quot;FASE_EN_CURSO&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s2">&quot;Fase 4&quot;</span><span class="p">,</span> <span class="s2">&quot;Fase 5&quot;</span><span class="p">]))</span>
+        <span class="p">]</span>
+
+    <span class="n">df_mandatory</span> <span class="o">=</span> <span class="n">df_temp</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">df2</span><span class="p">[</span><span class="s2">&quot;TIPO_DE_INVERSION&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s2">&quot;Básica&quot;</span><span class="p">]))]</span>
+
+    <span class="n">df_semi_mandatory</span> <span class="o">=</span> <span class="n">df_temp</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="o">~</span><span class="n">df2</span><span class="p">[</span><span class="s2">&quot;TIPO_DE_INVERSION&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s2">&quot;Básica&quot;</span><span class="p">]))]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">zero_restriction</span><span class="p">:</span>
+        <span class="n">df_optional</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df_optional</span><span class="p">,</span> <span class="n">df_zeros</span><span class="p">])</span>
+        <span class="n">df_zeros</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({},</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">be_restriction</span><span class="p">:</span>
+        <span class="n">df_optional</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df_optional</span><span class="p">,</span> <span class="n">df_be</span><span class="p">])</span>
+        <span class="n">df_be</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({},</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">phase_restriction</span><span class="p">:</span>
+        <span class="n">df_temp_2</span> <span class="o">=</span> <span class="n">df_semi_mandatory</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+            <span class="n">df_semi_mandatory</span><span class="p">[</span><span class="s2">&quot;FASE_EN_CURSO&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s2">&quot;Fase 4&quot;</span><span class="p">,</span> <span class="s2">&quot;Fase 5&quot;</span><span class="p">])</span>
+            <span class="o">&amp;</span> <span class="p">(</span>
+                <span class="o">~</span><span class="n">df_semi_mandatory</span><span class="p">[</span><span class="s2">&quot;TIPO_DE_INVERSION&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span>
+                    <span class="p">[</span><span class="s2">&quot;ICO - Mto Mayor&quot;</span><span class="p">,</span> <span class="s2">&quot;ICO - Normativo&quot;</span><span class="p">]</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="p">]</span>
+        <span class="n">df_optional</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df_optional</span><span class="p">,</span> <span class="n">df_temp_2</span><span class="p">])</span>
+        <span class="n">df_semi_mandatory</span> <span class="o">=</span> <span class="n">df_semi_mandatory</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+            <span class="p">(</span>
+                <span class="n">df_semi_mandatory</span><span class="p">[</span><span class="s2">&quot;TIPO_DE_INVERSION&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span>
+                    <span class="p">[</span><span class="s2">&quot;ICO - Mto Mayor&quot;</span><span class="p">,</span> <span class="s2">&quot;ICO - Normativo&quot;</span><span class="p">]</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">]</span>
+
+    <span class="n">index</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">df_optional</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s2">&quot;INDEX&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">index</span> <span class="o">:=</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">index</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">df_optional</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="p">]</span>
+    <span class="n">df_zeros_2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df_zeros</span><span class="p">,</span> <span class="n">df_no_duration</span><span class="p">,</span> <span class="n">df_be</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">df_optional</span><span class="p">,</span> <span class="n">df_zeros_2</span><span class="p">,</span> <span class="n">df_mandatory</span><span class="p">,</span> <span class="n">df_semi_mandatory</span></div>
+
+
+
+<div class="viewcode-block" id="get_project_params">
+<a class="viewcode-back" href="../../utils.html#utils.model_utils.get_project_params">[docs]</a>
+<span class="k">def</span> <span class="nf">get_project_params</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to get the params per year of a portfolio</span>
+
+<span class="sd">    :param df: Pandas.DataFrame with the projects to extract the param values</span>
+<span class="sd">    :type df: DataFrame</span>
+<span class="sd">    :param config: Dictionary containing different configs</span>
+<span class="sd">    :type config: Dictionary</span>
+
+<span class="sd">    :usage:</span>
+
+<span class="sd">    get_project_params(df,18)</span>
+
+<span class="sd">    :return:</span>
+<span class="sd">    numpy.array: array of vpn value for each year</span>
+<span class="sd">    numpy.array: array of water value for each year</span>
+<span class="sd">    numpy.array: array of co2 value for each year</span>
+<span class="sd">    numpy.array: array of energy value for each year</span>
+<span class="sd">    numpy.array: array of ebidta value for each year</span>
+<span class="sd">    numpy.array: array of ebidta value for low emission projects for each year</span>
+<span class="sd">    numpy.array: array of global nation for each year</span>
+
+<span class="sd">    :rtype tuple(np.array, np.array, np.array, np.array, np.array, np.array, np.array)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">]),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">]),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">]),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">]),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">]),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">]),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">]),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">]),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">]),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">]),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">]),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">]),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">]),</span>
+        <span class="p">)</span>
+    <span class="n">df_range</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+        <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;RANGO_ANIO&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;ANIO_INICIAL&quot;</span><span class="p">])</span>
+        <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;RANGO_ANIO&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;ANIO_FINAL&quot;</span><span class="p">])</span>
+        <span class="p">]</span>
+
+    <span class="n">anios</span> <span class="o">=</span> <span class="n">df_range</span><span class="p">[</span><span class="s1">&#39;RANGO_ANIO&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">anios</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">]:</span>
+        <span class="n">df_range</span> <span class="o">=</span> <span class="n">check_length</span><span class="p">(</span><span class="n">df_range</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+
+    <span class="n">df_range</span> <span class="o">=</span> <span class="n">df_range</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;RANGO_ANIO&quot;</span><span class="p">)</span>
+
+    <span class="n">water</span> <span class="o">=</span> <span class="n">df_range</span><span class="p">[</span><span class="s2">&quot;AGUA_NEUTRALIDAD&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">co2</span> <span class="o">=</span> <span class="n">df_range</span><span class="p">[</span><span class="s2">&quot;EMISIONES_NETAS_CO2_ALCANCE_1_Y_2&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">energy</span> <span class="o">=</span> <span class="n">df_range</span><span class="p">[</span><span class="s2">&quot;MW_INCORPORADOS&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">ebidta</span> <span class="o">=</span> <span class="n">df_range</span><span class="p">[</span><span class="s2">&quot;EBITDA&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">ebidta_low_emission</span> <span class="o">=</span> <span class="n">df_range</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+        <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+            <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s2">&quot;LINEA_DE_NEGOCIO&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Bajas Emisiones&quot;</span><span class="p">)</span> <span class="o">|</span>
+            <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s2">&quot;LINEA_DE_NEGOCIO&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Transmisión y Vías&quot;</span><span class="p">),</span> <span class="s2">&quot;EBITDA&quot;</span>
+        <span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="n">employee_cap</span> <span class="o">=</span> <span class="n">df_range</span><span class="p">[</span><span class="s2">&quot;CAPITAL_EMPLEADO&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">global_nation</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">df_range</span><span class="p">[</span><span class="s2">&quot;DIVIDENDO&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="o">+</span> <span class="n">df_range</span><span class="p">[</span><span class="s2">&quot;IMPUESTOS&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="o">+</span> <span class="n">df_range</span><span class="p">[</span><span class="s2">&quot;TOTAL_R_NACION&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="c1"># cti = df_range[&quot;APORTE_EBITDA_ACUM_2040_PROYECTOS_ASOCIADOS_A_CTI&quot;].sum()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">cti</span> <span class="o">=</span> <span class="n">df_range</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+                <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s2">&quot;SEGMENTO&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Corporativo&quot;</span><span class="p">),</span> <span class="s2">&quot;EBITDA&quot;</span>
+            <span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">cti</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">])</span>
+    <span class="n">not_oil_jobs</span> <span class="o">=</span> <span class="n">df_range</span><span class="p">[</span><span class="s2">&quot;EMPLEOS_NP&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">students</span> <span class="o">=</span> <span class="n">df_range</span><span class="p">[</span><span class="s2">&quot;ESTUDIANTES&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">access_water</span> <span class="o">=</span> <span class="n">df_range</span><span class="p">[</span><span class="s2">&quot;ACCESO_AGUA_POTABLE&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">access_gas</span> <span class="o">=</span> <span class="n">df_range</span><span class="p">[</span><span class="s2">&quot;ACCESO_GAS&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">km</span> <span class="o">=</span> <span class="n">df_range</span><span class="p">[</span><span class="s2">&quot;KM&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">vpn</span> <span class="o">=</span> <span class="n">df_range</span><span class="p">[</span><span class="s2">&quot;VPN_PLP_CALCULADO&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">water</span><span class="p">,</span>
+        <span class="n">co2</span><span class="p">,</span>
+        <span class="n">energy</span><span class="p">,</span>
+        <span class="n">ebidta</span><span class="p">,</span>
+        <span class="n">ebidta_low_emission</span><span class="p">,</span>
+        <span class="n">global_nation</span><span class="p">,</span>
+        <span class="n">cti</span><span class="p">,</span>
+        <span class="n">not_oil_jobs</span><span class="p">,</span>
+        <span class="n">students</span><span class="p">,</span>
+        <span class="n">access_water</span><span class="p">,</span>
+        <span class="n">access_gas</span><span class="p">,</span>
+        <span class="n">km</span><span class="p">,</span>
+        <span class="n">vpn</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_capex_portfolio">
+<a class="viewcode-back" href="../../utils.html#utils.model_utils.get_capex_portfolio">[docs]</a>
+<span class="k">def</span> <span class="nf">get_capex_portfolio</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to get the params per year of a portfolio</span>
+
+<span class="sd">    :param df: Pandas.DataFrame with the projects to extract the param values</span>
+<span class="sd">    :type df: DataFrame</span>
+<span class="sd">    :param config: Dictionary containing different configs</span>
+<span class="sd">    :type config: Dictionary</span>
+
+<span class="sd">    :usage:</span>
+
+<span class="sd">    get_capex_portfolio(df,config)</span>
+
+<span class="sd">    :return:</span>
+<span class="sd">    numpy.array: array of capex value for each year</span>
+<span class="sd">    :rtype np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">])</span>
+    <span class="n">df_range</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+        <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;RANGO_ANIO&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;ANIO_INICIAL&quot;</span><span class="p">])</span>
+        <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;RANGO_ANIO&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ANIO_FINAL&quot;</span><span class="p">]))</span>
+        <span class="p">]</span>
+
+    <span class="n">anios</span> <span class="o">=</span> <span class="n">df_range</span><span class="p">[</span><span class="s1">&#39;RANGO_ANIO&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">anios</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">]:</span>
+        <span class="n">df_range</span> <span class="o">=</span> <span class="n">check_length</span><span class="p">(</span><span class="n">df_range</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+
+    <span class="n">df_year</span> <span class="o">=</span> <span class="n">df_range</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;RANGO_ANIO&quot;</span><span class="p">)</span>
+    <span class="n">capex</span> <span class="o">=</span> <span class="n">df_year</span><span class="p">[</span><span class="s2">&quot;CAPEX&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">capex</span></div>
+
+
+
+<div class="viewcode-block" id="check_length">
+<a class="viewcode-back" href="../../utils.html#utils.model_utils.check_length">[docs]</a>
+<span class="k">def</span> <span class="nf">check_length</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+    <span class="n">df_copy</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">start_year</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;start_year&quot;</span><span class="p">]</span>
+    <span class="n">cur_year</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;start_year&quot;</span><span class="p">]</span>
+
+    <span class="k">while</span> <span class="n">cur_year</span> <span class="o">&lt;</span> <span class="n">start_year</span> <span class="o">+</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">]:</span>
+        <span class="n">new_row</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="n">df_copy</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+        <span class="n">new_row</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;RANGO_ANIO&quot;</span><span class="p">:</span> <span class="n">cur_year</span><span class="p">},</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">df_copy</span> <span class="o">=</span> <span class="n">df_copy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_row</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">cur_year</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">df_copy</span></div>
+
+
+<div class="viewcode-block" id="get_flujo_portfolio">
+<a class="viewcode-back" href="../../utils.html#utils.model_utils.get_flujo_portfolio">[docs]</a>
+<span class="k">def</span> <span class="nf">get_flujo_portfolio</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to get the flow per year of a portfolio</span>
+
+<span class="sd">    :param df: Pandas.DataFrame with the projects to extract the param values</span>
+<span class="sd">    :type df: DataFrame</span>
+<span class="sd">    :param config: Dictionary containing different configs</span>
+<span class="sd">    :type config: Dictionary</span>
+
+<span class="sd">    :usage:</span>
+
+<span class="sd">    get_flujo_portfolio(df,config)</span>
+
+<span class="sd">    :return:</span>
+<span class="sd">    numpy.array: array of flow value for each year</span>
+<span class="sd">    :rtype np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">])</span>
+    <span class="n">df_range</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+        <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s2">&quot;RANGO_ANIO&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s2">&quot;ANIO_INICIAL&quot;</span><span class="p">])</span>
+        <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s2">&quot;RANGO_ANIO&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s2">&quot;ANIO_FINAL&quot;</span><span class="p">]))</span>
+        <span class="p">]</span>
+    <span class="n">anios</span> <span class="o">=</span> <span class="n">df_range</span><span class="p">[</span><span class="s1">&#39;RANGO_ANIO&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">anios</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">]:</span>
+        <span class="n">df_range</span> <span class="o">=</span> <span class="n">check_length</span><span class="p">(</span><span class="n">df_range</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+
+    <span class="n">df_range</span> <span class="o">=</span> <span class="n">df_range</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;RANGO_ANIO&quot;</span><span class="p">,</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)[[</span><span class="s2">&quot;FLUJO_CAJA&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">df_range</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s2">&quot;FLUJO_CAJA&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="get_projects">
+<a class="viewcode-back" href="../../utils.html#utils.model_utils.get_projects">[docs]</a>
+<span class="k">def</span> <span class="nf">get_projects</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">portfolio</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to get a dataframe with the projects to leave on</span>
+
+<span class="sd">    :param df: Pandas.DataFrame with the projects considered</span>
+<span class="sd">    :type df: DataFrame</span>
+<span class="sd">    :param portfolio: list of projects on or off</span>
+<span class="sd">    :type portfolio: list</span>
+
+<span class="sd">    :usage:</span>
+<span class="sd">    get_projects(df,[0,1])</span>
+
+<span class="sd">    :return:</span>
+<span class="sd">    Pandas.DataFrame: Dataframe with the data of the projects selected in the portfolio</span>
+<span class="sd">    :rtype Dataframe</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">projects</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;MATRICULA_DIGITAL&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+    <span class="n">projects_on</span> <span class="o">=</span> <span class="n">projects</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">portfolio</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;bool&quot;</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;MATRICULA_DIGITAL&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">projects_on</span><span class="p">)]</span></div>
+
+
+
+<div class="viewcode-block" id="get_off_actives">
+<a class="viewcode-back" href="../../utils.html#utils.model_utils.get_off_actives">[docs]</a>
+<span class="k">def</span> <span class="nf">get_off_actives</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">portfolio</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to get the actives with basic off</span>
+
+<span class="sd">    :param df: DataFrame with the projects to extract the off projects</span>
+<span class="sd">    :type df: DataFrame</span>
+<span class="sd">    :param portfolio: list with 1 and 0 that represent projects on or off</span>
+<span class="sd">    :type portfolio: list</span>
+
+<span class="sd">    :usage:</span>
+<span class="sd">        get_off_actives(df, portfolio)</span>
+<span class="sd">    :return: array with actives which basic are off in the portfolio</span>
+<span class="sd">    :rtype np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">df_off_projects</span> <span class="o">=</span> <span class="n">get_projects</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">portfolio</span><span class="p">))</span>
+    <span class="n">df_off_basic</span> <span class="o">=</span> <span class="n">df_off_projects</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+        <span class="n">df_off_projects</span><span class="p">[</span><span class="s2">&quot;TIPO_DE_INVERSION&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Básica&quot;</span>
+        <span class="p">]</span>
+    <span class="k">return</span> <span class="n">df_off_basic</span><span class="p">[</span><span class="s2">&quot;ACTIVO&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="get_indexes_turn_off">
+<a class="viewcode-back" href="../../utils.html#utils.model_utils.get_indexes_turn_off">[docs]</a>
+<span class="k">def</span> <span class="nf">get_indexes_turn_off</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">actives</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to return the index of the projects which basics are off</span>
+
+<span class="sd">    :param df: df containing the projects</span>
+<span class="sd">    :type df: DataFrame</span>
+<span class="sd">    :param actives: array with the actives off</span>
+<span class="sd">    :type actives: np.array</span>
+
+<span class="sd">    :usage:</span>
+<span class="sd">    indexes_turn_off(df, actives)</span>
+
+<span class="sd">    :return: Index of the projects</span>
+<span class="sd">    :rtype np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ACTIVO&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">actives</span><span class="p">),</span> <span class="s2">&quot;INDEX&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="get_semi_mandatory_on">
+<a class="viewcode-back" href="../../utils.html#utils.model_utils.get_semi_mandatory_on">[docs]</a>
+<span class="k">def</span> <span class="nf">get_semi_mandatory_on</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">actives</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to get the projects on phase 4 that are on in the portfolio</span>
+
+<span class="sd">    :param df: df containing the projects of phase 4</span>
+<span class="sd">    :type df: DataFrame</span>
+<span class="sd">    :param actives: array with the actives off</span>
+<span class="sd">    :type actives: np.array</span>
+
+<span class="sd">    :usage:</span>
+<span class="sd">    get_semi_mandatory_on(df, actives)</span>
+
+<span class="sd">    :return: DataFrame of projects on</span>
+<span class="sd">    :rtype DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ACTIVO&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">actives</span><span class="p">)]</span></div>
+
+
+
+<div class="viewcode-block" id="get_indexes_isa">
+<a class="viewcode-back" href="../../utils.html#utils.model_utils.get_indexes_isa">[docs]</a>
+<span class="k">def</span> <span class="nf">get_indexes_isa</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to return the index of the projects in which the column EMPRESA equals ISA</span>
+
+<span class="sd">    :param df: df containing the projects</span>
+<span class="sd">    :type df: DataFrame</span>
+
+<span class="sd">    :usage:</span>
+<span class="sd">    indexes_isa(df)</span>
+
+<span class="sd">    :return: Index of the projects</span>
+<span class="sd">    :rtype np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;EMPRESA&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;ISA&quot;</span><span class="p">,</span> <span class="s2">&quot;INDEX&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="get_basic_index">
+<a class="viewcode-back" href="../../utils.html#utils.model_utils.get_basic_index">[docs]</a>
+<span class="k">def</span> <span class="nf">get_basic_index</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to return the index of the projects in which the column EMPRESA equals ISA</span>
+<span class="sd">    :param df: df containing the projects</span>
+<span class="sd">    :type df: DataFrame</span>
+
+<span class="sd">    :usage:</span>
+<span class="sd">    indexes_isa(df)</span>
+
+<span class="sd">    :return: Index of the projects</span>
+<span class="sd">    :rtype np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;TIPO_DE_INVERSION&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Básica&quot;</span><span class="p">,</span> <span class="s2">&quot;INDEX&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="check_isa">
+<a class="viewcode-back" href="../../utils.html#utils.model_utils.check_isa">[docs]</a>
+<span class="k">def</span> <span class="nf">check_isa</span><span class="p">(</span><span class="n">mutant</span><span class="p">,</span> <span class="n">indexes_isa</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to check ISA restriction, in this function the array is passed by reference bacause of this</span>
+<span class="sd">    it is modified here without the need of returning it</span>
+
+<span class="sd">    :param mutant: np.array containing the portafolio to be checked</span>
+<span class="sd">    :type mutant: np.array</span>
+<span class="sd">    :param indexes_isa: np.array containing index location of ISA projects</span>
+<span class="sd">    :type indexes_isa: np.array</span>
+
+<span class="sd">    :return: None</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">while</span> <span class="n">mutant</span><span class="p">[</span><span class="n">indexes_isa</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">ran</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">indexes_isa</span><span class="p">))</span>
+        <span class="n">mutant</span><span class="p">[</span><span class="n">indexes_isa</span><span class="p">[</span><span class="n">ran</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">if</span> <span class="n">mutant</span><span class="p">[</span><span class="n">indexes_isa</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">ran</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">indexes_isa</span><span class="p">))</span>
+        <span class="n">mutant</span><span class="p">[</span><span class="n">indexes_isa</span><span class="p">[</span><span class="n">ran</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span></div>
+
+
+
+<div class="viewcode-block" id="check_capex">
+<a class="viewcode-back" href="../../utils.html#utils.model_utils.check_capex">[docs]</a>
+<span class="k">def</span> <span class="nf">check_capex</span><span class="p">(</span><span class="n">mutant</span><span class="p">,</span> <span class="n">df_projects</span><span class="p">,</span> <span class="n">df_semi_mandatory</span><span class="p">,</span> <span class="n">mandatory_capex</span><span class="p">,</span> <span class="n">actives_off</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to check capex restriction, in this function the array is passed by reference because of this</span>
+<span class="sd">    it is modified here without the need of returning it</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        mutant:</span>
+<span class="sd">        df_projects:</span>
+<span class="sd">        df_semi_mandatory:</span>
+<span class="sd">        mandatory_capex:</span>
+<span class="sd">        actives_off:</span>
+<span class="sd">        config:</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    :param mutant: np.array containing the portafolio to be checked</span>
+<span class="sd">    :type mutant: np.array</span>
+<span class="sd">    :param df_projects: df containing projects</span>
+<span class="sd">    :type df_projects: DataFrame</span>
+<span class="sd">    :param df_semi_mandatory: df containing semi mandatory projects</span>
+<span class="sd">    :type df_semi_mandatory: DataFrame</span>
+<span class="sd">    :param mandatory_capex: np.array containing the mandatory capex for each year</span>
+<span class="sd">    :type mandatory_capex: np.array</span>
+<span class="sd">    :param actives_off: np.array actives with basic off</span>
+<span class="sd">    :type actives_off: np.array</span>
+<span class="sd">    :param config: dictionary containing configs</span>
+<span class="sd">    :type config: dictionary</span>
+
+<span class="sd">    :return: None</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">capex_semi_mandatory</span> <span class="o">=</span> <span class="n">get_capex_portfolio</span><span class="p">(</span>
+        <span class="n">get_semi_mandatory_on</span><span class="p">(</span><span class="n">df_semi_mandatory</span><span class="p">,</span> <span class="n">actives_off</span><span class="p">),</span>
+        <span class="n">config</span>
+    <span class="p">)</span>
+    <span class="c1"># check capex is in budget</span>
+    <span class="n">df_projects_on</span> <span class="o">=</span> <span class="n">get_projects</span><span class="p">(</span><span class="n">df_projects</span><span class="p">,</span> <span class="n">mutant</span><span class="p">)</span>
+    <span class="n">capex</span> <span class="o">=</span> <span class="n">get_capex_portfolio</span><span class="p">(</span><span class="n">df_projects_on</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+    <span class="n">overbudget_years</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">capex</span> <span class="o">+</span> <span class="n">mandatory_capex</span> <span class="o">+</span> <span class="n">capex_semi_mandatory</span><span class="p">)</span>
+        <span class="o">&gt;</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;capex_yearly_budget&quot;</span><span class="p">]</span>
+    <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">overbudget_years</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">durations</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">df_projects_on</span><span class="p">[</span><span class="s2">&quot;ANIO_INICIAL&quot;</span><span class="p">]</span>
+                <span class="o">-</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;start_year&quot;</span><span class="p">]</span>
+                <span class="o">+</span> <span class="n">df_projects_on</span><span class="p">[</span><span class="s2">&quot;DURACION&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">year</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">overbudget_years</span><span class="p">):</span>
+            <span class="n">df_year</span> <span class="o">=</span> <span class="n">df_projects_on</span><span class="p">[</span><span class="n">durations</span> <span class="o">&gt;</span> <span class="n">year</span><span class="p">]</span>
+            <span class="n">project</span> <span class="o">=</span> <span class="n">df_year</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">rd</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">df_year</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+            <span class="c1"># ensure not to turn off basic or ISA project</span>
+            <span class="k">while</span> <span class="p">(</span>
+                    <span class="n">project</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">&quot;TIPO_DE_INVERSION&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Básica&quot;</span>
+                    <span class="ow">or</span> <span class="n">project</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">&quot;EMPRESA&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;ISA&quot;</span>
+            <span class="p">):</span>
+                <span class="n">project</span> <span class="o">=</span> <span class="n">df_year</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">rd</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">df_year</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+            <span class="n">project_index</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">&quot;INDEX&quot;</span><span class="p">]</span>
+            <span class="n">mutant</span><span class="p">[</span><span class="n">project_index</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">df_projects_on</span> <span class="o">=</span> <span class="n">get_projects</span><span class="p">(</span><span class="n">df_projects</span><span class="p">,</span> <span class="n">mutant</span><span class="p">)</span>
+        <span class="n">capex</span> <span class="o">=</span> <span class="n">get_capex_portfolio</span><span class="p">(</span><span class="n">df_projects_on</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+        <span class="n">actives_off</span> <span class="o">=</span> <span class="n">get_off_actives</span><span class="p">(</span><span class="n">df_projects</span><span class="p">,</span> <span class="n">mutant</span><span class="p">)</span>
+
+        <span class="n">capex_semi_mandatory</span> <span class="o">=</span> <span class="n">get_capex_portfolio</span><span class="p">(</span>
+            <span class="n">get_semi_mandatory_on</span><span class="p">(</span><span class="n">df_semi_mandatory</span><span class="p">,</span> <span class="n">actives_off</span><span class="p">),</span>
+            <span class="n">config</span>
+        <span class="p">)</span>
+        <span class="n">overbudget_years</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">capex</span> <span class="o">+</span> <span class="n">mandatory_capex</span> <span class="o">+</span> <span class="n">capex_semi_mandatory</span><span class="p">)</span>
+            <span class="o">&gt;</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;capex_yearly_budget&quot;</span><span class="p">]</span>
+        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span></div>
+
+    <span class="c1"># end loop mutants</span>
+
+
+<div class="viewcode-block" id="generate_initial_population">
+<a class="viewcode-back" href="../../utils.html#utils.model_utils.generate_initial_population">[docs]</a>
+<span class="k">def</span> <span class="nf">generate_initial_population</span><span class="p">(</span>
+        <span class="n">sol_per_pop</span><span class="p">,</span>
+        <span class="n">num_genes</span><span class="p">,</span>
+        <span class="n">df</span><span class="p">,</span>
+        <span class="n">df_semi_mandatory</span><span class="p">,</span>
+        <span class="n">isa_index</span><span class="p">,</span>
+        <span class="n">mandatory_capex</span><span class="p">,</span>
+        <span class="n">config</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Funcion that creates an initial population given the solutions per population, number of genes</span>
+<span class="sd">    and the data. All the basic projects will be set to one, and the capex restriction is met from the start</span>
+<span class="sd">    :param sol_per_pop: solutions per population</span>
+<span class="sd">    :type df: int</span>
+<span class="sd">    :param num_genes: number of genes</span>
+<span class="sd">    :type df: int</span>
+<span class="sd">    :param df: data containing projects</span>
+<span class="sd">    :type df: DataFrame</span>
+<span class="sd">    :param df_semi_mandatory: data containing semi_mandatory projects</span>
+<span class="sd">    :type df_semi_mandatory: DataFrame</span>
+<span class="sd">    :param isa_index: array containing index of ISA projects</span>
+<span class="sd">    :type isa_index: np.array</span>
+<span class="sd">    :param mandatory_capex: array containing mandatory capex</span>
+<span class="sd">    :type mandatory_capex: np.array</span>
+<span class="sd">    :param config: Dictionary containing configurations</span>
+<span class="sd">    :type config: Dictionary</span>
+
+<span class="sd">    :return: np array containing the population</span>
+<span class="sd">    :rtype np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">initial_population</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">sol_per_pop</span><span class="p">,</span> <span class="n">num_genes</span><span class="p">))</span>
+    <span class="n">basic_index</span> <span class="o">=</span> <span class="n">get_basic_index</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">basic_index</span><span class="p">:</span>
+        <span class="n">initial_population</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">for</span> <span class="n">portfolio</span> <span class="ow">in</span> <span class="n">initial_population</span><span class="p">:</span>
+        <span class="c1"># turn off projects with basic off</span>
+        <span class="n">actives_off</span> <span class="o">=</span> <span class="n">get_off_actives</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">portfolio</span><span class="p">)</span>
+        <span class="n">indexes_turn_off</span> <span class="o">=</span> <span class="n">get_indexes_turn_off</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">actives_off</span><span class="p">)</span>
+        <span class="n">portfolio</span><span class="p">[</span><span class="n">indexes_turn_off</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># check ISA</span>
+        <span class="n">check_isa</span><span class="p">(</span><span class="n">portfolio</span><span class="p">,</span> <span class="n">isa_index</span><span class="p">)</span>
+
+        <span class="n">check_capex</span><span class="p">(</span><span class="n">portfolio</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">df_semi_mandatory</span><span class="p">,</span> <span class="n">mandatory_capex</span><span class="p">,</span> <span class="n">actives_off</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">initial_population</span></div>
+
+
+
+<div class="viewcode-block" id="calc_fitness_water">
+<a class="viewcode-back" href="../../utils.html#utils.model_utils.calc_fitness_water">[docs]</a>
+<span class="k">def</span> <span class="nf">calc_fitness_water</span><span class="p">(</span><span class="n">water</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">actual</span><span class="p">,</span> <span class="n">coefficient</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Method to calculate the fitness of water used in a solution</span>
+
+<span class="sd">    :Usage:</span>
+
+<span class="sd">    self.penalize_water(water, 0.25)</span>
+
+<span class="sd">    :param water: array with the quantity of water for all years</span>
+<span class="sd">    :type water: np.array</span>
+<span class="sd">    :param actual: Actual value present in the model config</span>
+<span class="sd">    :type actual: float</span>
+<span class="sd">    :param coefficient: Parameter that gives weight to the fitness</span>
+<span class="sd">    :type coefficient: float</span>
+<span class="sd">    :return:</span>
+<span class="sd">        np.array: fitness of water for each year</span>
+<span class="sd">    :rtype np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="o">-</span><span class="p">(</span><span class="n">water</span> <span class="o">/</span> <span class="n">actual</span><span class="p">)</span> <span class="o">*</span> <span class="n">coefficient</span></div>
+
+
+
+<div class="viewcode-block" id="calc_fitness_co2">
+<a class="viewcode-back" href="../../utils.html#utils.model_utils.calc_fitness_co2">[docs]</a>
+<span class="k">def</span> <span class="nf">calc_fitness_co2</span><span class="p">(</span><span class="n">co2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">actual</span><span class="p">,</span> <span class="n">coefficient</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Method calculate the fitness of co2 used in a solution</span>
+
+<span class="sd">    :Usage:</span>
+
+<span class="sd">    self.penalize_co2(co2, 0.25)</span>
+
+<span class="sd">    :param co2: array with the quantity of co2 for all years</span>
+<span class="sd">    :type co2: np.array</span>
+<span class="sd">    :param actual: Actual value present in the model config</span>
+<span class="sd">    :type actual: float</span>
+<span class="sd">    :param coefficient: Parameter that gives weight to the fitness</span>
+<span class="sd">    :type coefficient: float</span>
+<span class="sd">    :return:</span>
+<span class="sd">        np.array: fitness of co2 for each year</span>
+<span class="sd">    :rtype np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="o">-</span><span class="p">(</span><span class="n">co2</span> <span class="o">/</span> <span class="n">actual</span><span class="p">)</span> <span class="o">*</span> <span class="n">coefficient</span></div>
+
+
+
+<div class="viewcode-block" id="calc_fitness_energy">
+<a class="viewcode-back" href="../../utils.html#utils.model_utils.calc_fitness_energy">[docs]</a>
+<span class="k">def</span> <span class="nf">calc_fitness_energy</span><span class="p">(</span><span class="n">energy</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">goal</span><span class="p">,</span> <span class="n">coefficient</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Method to calculate the fitness energy used in a solution</span>
+
+<span class="sd">    :Usage:</span>
+
+<span class="sd">    self.penalize_energy(energy, 0.25)</span>
+
+<span class="sd">    :param energy: array with the quantity of energy for all years</span>
+<span class="sd">    :type energy: np.array</span>
+<span class="sd">    :param goal: Goal value present in the model config</span>
+<span class="sd">    :type goal: float</span>
+<span class="sd">    :param coefficient: Parameter that gives weight to the fitness</span>
+<span class="sd">    :type coefficient: float</span>
+<span class="sd">    :return:</span>
+<span class="sd">        np.array: fitness energy</span>
+<span class="sd">    :rtype np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">energy</span> <span class="o">/</span> <span class="n">goal</span><span class="p">)</span> <span class="o">*</span> <span class="n">coefficient</span></div>
+
+
+
+<div class="viewcode-block" id="calc_fitness_gross">
+<a class="viewcode-back" href="../../utils.html#utils.model_utils.calc_fitness_gross">[docs]</a>
+<span class="k">def</span> <span class="nf">calc_fitness_gross</span><span class="p">(</span><span class="n">total_ebitda</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">deuda</span><span class="p">,</span> <span class="n">ratio</span><span class="p">,</span> <span class="n">coefficient</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">per_project</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">max_fit</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Method to calculate the fitness of the gross for a solution</span>
+
+<span class="sd">    :Usage:</span>
+
+<span class="sd">    self.penalize_gross(ebidta, 0.25)</span>
+
+<span class="sd">    :param total_ebitda: array with the total ebitda for all years</span>
+<span class="sd">    :type total_ebitda: np.array</span>
+<span class="sd">    :param deuda: array with the deuda restriction</span>
+<span class="sd">    :type deuda: np.array</span>
+<span class="sd">    :param ratio: ratio present in the config</span>
+<span class="sd">    :type ratio: float</span>
+<span class="sd">    :param coefficient: Parameter that gives weight to the fitness</span>
+<span class="sd">    :type coefficient: float</span>
+<span class="sd">    :return:</span>
+<span class="sd">        np.array: fitness of gross</span>
+<span class="sd">    :rtype np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">total_ebitda</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">):</span>
+        <span class="n">debt_ratio</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">deuda</span><span class="p">)</span> <span class="o">/</span> <span class="n">total_ebitda</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">debt_ratio</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span>
+            <span class="n">deuda</span><span class="p">,</span>
+            <span class="n">total_ebitda</span><span class="p">,</span>
+            <span class="n">out</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">total_ebitda</span><span class="p">),</span>
+            <span class="n">where</span><span class="o">=</span><span class="n">total_ebitda</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="n">ratio</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span>
+        <span class="n">ratio</span><span class="p">,</span>
+        <span class="n">debt_ratio</span><span class="p">,</span>
+        <span class="n">out</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">debt_ratio</span><span class="p">),</span>
+        <span class="n">where</span><span class="o">=</span><span class="n">debt_ratio</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">ratio</span> <span class="o">*</span> <span class="n">coefficient</span></div>
+
+
+
+<div class="viewcode-block" id="calc_fitness_ebitda">
+<a class="viewcode-back" href="../../utils.html#utils.model_utils.calc_fitness_ebitda">[docs]</a>
+<span class="k">def</span> <span class="nf">calc_fitness_ebitda</span><span class="p">(</span><span class="n">total_ebitda</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">minimum</span><span class="p">,</span> <span class="n">coefficient</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Method to calculate the fitness of ebitda for a solution</span>
+
+<span class="sd">    :Usage:</span>
+
+<span class="sd">    self.penalize_ebitda(ebitda, 0.25)</span>
+
+<span class="sd">    :param total_ebitda: array with the total ebitda for all years</span>
+<span class="sd">    :type total_ebitda: np.array</span>
+<span class="sd">    :param minimum: minimum value present in the model config</span>
+<span class="sd">    :type minimum: float</span>
+<span class="sd">    :param coefficient: Parameter that gives weight to the fitness</span>
+<span class="sd">    :type coefficient: float</span>
+<span class="sd">    :return:</span>
+<span class="sd">        np.array: fitness of ebitda</span>
+<span class="sd">    :rtype np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">total_ebitda</span> <span class="o">/</span> <span class="n">minimum</span><span class="p">)</span> <span class="o">*</span> <span class="n">coefficient</span></div>
+
+
+
+<div class="viewcode-block" id="calc_fitness_low_emissions">
+<a class="viewcode-back" href="../../utils.html#utils.model_utils.calc_fitness_low_emissions">[docs]</a>
+<span class="k">def</span> <span class="nf">calc_fitness_low_emissions</span><span class="p">(</span>
+        <span class="n">total_ebitda</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
+        <span class="n">total_low_ebitda</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
+        <span class="n">minimum</span><span class="p">,</span>
+        <span class="n">coefficient</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">goal</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Method  to calculate the fitness of low emissions used in a solution</span>
+
+<span class="sd">    :param total_low_ebitda: array with the total sum of low emissions projects for all years</span>
+<span class="sd">    :type total_low_ebitda: np.array</span>
+<span class="sd">    :param total_ebitda: array with the total sum of all projects ebitda for all years</span>
+<span class="sd">    :type total_ebitda: np.array</span>
+<span class="sd">    :param minimum: minimum value present in the model config</span>
+<span class="sd">    :type minimum: float</span>
+<span class="sd">    :param coefficient: Parameter that gives weight to the fitness</span>
+<span class="sd">    :type coefficient: float</span>
+<span class="sd">    :param goal: Parameter that tells if we just want the goal or if we want the fitness</span>
+<span class="sd">    :type goal: bool</span>
+
+<span class="sd">    :Usage:</span>
+
+<span class="sd">    self.penalize_low_emissions(ebidta, low_emission_ebidta, 0.25)</span>
+
+<span class="sd">    :return:</span>
+<span class="sd">        np.array: fitness low emission</span>
+<span class="sd">    :rtype np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="n">values</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">values</span> <span class="o">&gt;</span> <span class="mf">2.5</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">values</span> <span class="o">&gt;</span> <span class="mf">2.0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.8</span>
+        <span class="k">elif</span> <span class="n">values</span> <span class="o">&gt;</span> <span class="mf">1.5</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.6</span>
+        <span class="k">elif</span> <span class="n">values</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.4</span>
+        <span class="k">elif</span> <span class="n">values</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.2</span>
+        <span class="k">elif</span> <span class="n">values</span> <span class="o">&gt;</span> <span class="mf">0.1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="n">ratio</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span>
+        <span class="n">total_low_ebitda</span><span class="p">,</span>
+        <span class="n">total_ebitda</span><span class="p">,</span>
+        <span class="n">out</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">total_ebitda</span><span class="p">),</span>
+        <span class="n">where</span><span class="o">=</span><span class="n">total_ebitda</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">ratio</span> <span class="o">=</span> <span class="n">ratio</span> <span class="o">/</span> <span class="n">minimum</span>
+    <span class="n">v_func</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="n">check</span><span class="p">)</span>
+    <span class="n">new_ratio</span> <span class="o">=</span> <span class="n">v_func</span><span class="p">(</span><span class="n">ratio</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">goal</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ratio</span>
+    <span class="k">return</span> <span class="n">new_ratio</span> <span class="o">*</span> <span class="n">coefficient</span></div>
+
+
+
+<div class="viewcode-block" id="calc_fitness_global_nation">
+<a class="viewcode-back" href="../../utils.html#utils.model_utils.calc_fitness_global_nation">[docs]</a>
+<span class="k">def</span> <span class="nf">calc_fitness_global_nation</span><span class="p">(</span><span class="n">total_global_nation</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">minimum</span><span class="p">,</span> <span class="n">coefficient</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Method to calculate the average of nation transfer throughout the years</span>
+
+<span class="sd">    :param total_global_nation: array with the total global nation for each year</span>
+<span class="sd">    :type total_global_nation: np.array</span>
+<span class="sd">    :param minimum: minimum value present in the model config</span>
+<span class="sd">    :type minimum: float</span>
+<span class="sd">    :param coefficient: weight applied to the fitness</span>
+<span class="sd">    :type coefficient: float</span>
+
+<span class="sd">    :Usage:</span>
+
+<span class="sd">    self.penalize_global_nation(total_global_nation, 0.25)</span>
+
+<span class="sd">    :return:</span>
+<span class="sd">        np.array: fitness of global nation per year</span>
+<span class="sd">    :rtype np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">total_global_nation</span> <span class="o">/</span> <span class="n">minimum</span><span class="p">)</span> <span class="o">*</span> <span class="n">coefficient</span></div>
+
+
+
+<div class="viewcode-block" id="calc_fitness_cti">
+<a class="viewcode-back" href="../../utils.html#utils.model_utils.calc_fitness_cti">[docs]</a>
+<span class="k">def</span> <span class="nf">calc_fitness_cti</span><span class="p">(</span><span class="n">cti</span><span class="p">,</span> <span class="n">goal</span><span class="p">,</span> <span class="n">coefficient</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Method to calculate the fitness of ct+i ebitda used in a solution</span>
+
+<span class="sd">    :param cti: array with the ct+i ebitda of projects for all years</span>
+<span class="sd">    :type cti: np.array</span>
+<span class="sd">    :param goal: goal value present in the model config</span>
+<span class="sd">    :type goal: float</span>
+<span class="sd">    :param coefficient: Parameter that gives weight to the fitness</span>
+<span class="sd">    :type coefficient: float</span>
+
+<span class="sd">    :Usage:</span>
+
+<span class="sd">    self.calc_fitness_cti(cti,20, 0.25)</span>
+
+<span class="sd">    :return:</span>
+<span class="sd">        np.array: fitness of ct+i</span>
+<span class="sd">    :rtype np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cti_acum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">cti</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">cti_acum</span> <span class="o">/</span> <span class="n">goal</span><span class="p">)</span> <span class="o">*</span> <span class="n">coefficient</span></div>
+
+
+
+<div class="viewcode-block" id="calc_fitness_not_oil_jobs">
+<a class="viewcode-back" href="../../utils.html#utils.model_utils.calc_fitness_not_oil_jobs">[docs]</a>
+<span class="k">def</span> <span class="nf">calc_fitness_not_oil_jobs</span><span class="p">(</span><span class="n">not_oil_jobs</span><span class="p">,</span> <span class="n">goal</span><span class="p">,</span> <span class="n">coefficient</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Method to calculate the fitness of not oil jobs used in a solution</span>
+
+<span class="sd">    :param not_oil_jobs: array with the not_oil_jobs of projects for all years</span>
+<span class="sd">    :type not_oil_jobs: np.array</span>
+<span class="sd">    :param goal: parameter with the goal for not_oil_jobs</span>
+<span class="sd">    :type goal: float</span>
+<span class="sd">    :param coefficient: Parameter that gives weight to the fitness</span>
+<span class="sd">    :type coefficient: float</span>
+
+<span class="sd">    :Usage:</span>
+
+<span class="sd">    self.calc_fitness_not_oil_jobs(not_oil_jobs,20, 0.25)</span>
+
+<span class="sd">    :return:</span>
+<span class="sd">        np.array: fitness of not_oil_jobs</span>
+<span class="sd">    :rtype np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">not_oil_jobs</span> <span class="o">/</span> <span class="n">goal</span><span class="p">)</span> <span class="o">*</span> <span class="n">coefficient</span></div>
+
+
+
+<div class="viewcode-block" id="calc_fitness_students">
+<a class="viewcode-back" href="../../utils.html#utils.model_utils.calc_fitness_students">[docs]</a>
+<span class="k">def</span> <span class="nf">calc_fitness_students</span><span class="p">(</span><span class="n">students</span><span class="p">,</span> <span class="n">goal</span><span class="p">,</span> <span class="n">coefficient</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Method to calculate the fitness of students used in a solution</span>
+
+<span class="sd">    :param students: array with the students of projects for all years</span>
+<span class="sd">    :type students: np.array</span>
+<span class="sd">    :param goal: parameter with the goal for students</span>
+<span class="sd">    :type goal: float</span>
+<span class="sd">    :param coefficient: Parameter that gives weight to the fitness</span>
+<span class="sd">    :type coefficient: float</span>
+
+<span class="sd">    :Usage:</span>
+
+<span class="sd">    self.calc_fitness_students(students,20, 0.25)</span>
+
+<span class="sd">    :return:</span>
+<span class="sd">        np.array: fitness of students</span>
+<span class="sd">    :rtype np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">students</span> <span class="o">/</span> <span class="n">goal</span><span class="p">)</span> <span class="o">*</span> <span class="n">coefficient</span></div>
+
+
+
+<div class="viewcode-block" id="calc_fitness_km">
+<a class="viewcode-back" href="../../utils.html#utils.model_utils.calc_fitness_km">[docs]</a>
+<span class="k">def</span> <span class="nf">calc_fitness_km</span><span class="p">(</span><span class="n">km</span><span class="p">,</span> <span class="n">goal</span><span class="p">,</span> <span class="n">coefficient</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Method to calculate the fitness of km used in a solution</span>
+
+<span class="sd">    :param km: array with the km of projects for all years</span>
+<span class="sd">    :type km: np.array</span>
+<span class="sd">    :param goal: parameter with the goal for km</span>
+<span class="sd">    :type goal: float</span>
+<span class="sd">    :param coefficient: Parameter that gives weight to the fitness</span>
+<span class="sd">    :type coefficient: float</span>
+
+<span class="sd">    :Usage:</span>
+
+<span class="sd">    self.calc_fitness_km(km,20, 0.25)</span>
+
+<span class="sd">    :return:</span>
+<span class="sd">        np.array: fitness of km</span>
+<span class="sd">    :rtype np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">km</span> <span class="o">/</span> <span class="n">goal</span><span class="p">)</span> <span class="o">*</span> <span class="n">coefficient</span></div>
+
+
+
+<div class="viewcode-block" id="calc_fitness_access_gas">
+<a class="viewcode-back" href="../../utils.html#utils.model_utils.calc_fitness_access_gas">[docs]</a>
+<span class="k">def</span> <span class="nf">calc_fitness_access_gas</span><span class="p">(</span><span class="n">access_gas</span><span class="p">,</span> <span class="n">goal</span><span class="p">,</span> <span class="n">coefficient</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Method to calculate the fitness of access_gas used in a solution</span>
+
+<span class="sd">    :param access_gas: array with the access_gas of projects for all years</span>
+<span class="sd">    :type access_gas: np.array</span>
+<span class="sd">    :param goal: parameter with the goal for access_gas</span>
+<span class="sd">    :type goal: float</span>
+<span class="sd">    :param coefficient: Parameter that gives weight to the fitness</span>
+<span class="sd">    :type coefficient: float</span>
+
+<span class="sd">    :Usage:</span>
+
+<span class="sd">    self.calc_fitness_access_gas(access_gas,20, 0.25)</span>
+
+<span class="sd">    :return:</span>
+<span class="sd">        np.array: fitness of access_gas</span>
+<span class="sd">    :rtype np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">access_gas</span> <span class="o">/</span> <span class="n">goal</span><span class="p">)</span> <span class="o">*</span> <span class="n">coefficient</span></div>
+
+
+
+<div class="viewcode-block" id="calc_fitness_access_water">
+<a class="viewcode-back" href="../../utils.html#utils.model_utils.calc_fitness_access_water">[docs]</a>
+<span class="k">def</span> <span class="nf">calc_fitness_access_water</span><span class="p">(</span><span class="n">access_water</span><span class="p">,</span> <span class="n">goal</span><span class="p">,</span> <span class="n">coefficient</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Method to calculate the fitness of access_water used in a solution</span>
+
+<span class="sd">    :param access_water: array with the access_water of projects for all years</span>
+<span class="sd">    :type access_water: np.array</span>
+<span class="sd">    :param goal: parameter with the goal for access_water</span>
+<span class="sd">    :type goal: float</span>
+<span class="sd">    :param coefficient: Parameter that gives weight to the fitness</span>
+<span class="sd">    :type coefficient: float</span>
+
+<span class="sd">    :Usage:</span>
+
+<span class="sd">    self.calc_fitness_access_water(access_water,20, 0.25)</span>
+
+<span class="sd">    :return:</span>
+<span class="sd">        np.array: fitness of access_water</span>
+<span class="sd">    :rtype np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">access_water</span> <span class="o">/</span> <span class="n">goal</span><span class="p">)</span> <span class="o">*</span> <span class="n">coefficient</span></div>
+
+
+
+<div class="viewcode-block" id="calc_fitness_capex">
+<a class="viewcode-back" href="../../utils.html#utils.model_utils.calc_fitness_capex">[docs]</a>
+<span class="k">def</span> <span class="nf">calc_fitness_capex</span><span class="p">(</span><span class="n">capex</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Method to calculate the fitness of capex used in a solution</span>
+
+<span class="sd">    :param capex: array with the capex of projects for all years</span>
+<span class="sd">    :type capex: np.array</span>
+
+<span class="sd">    :Usage:</span>
+
+<span class="sd">    self.calc_fitness_capex(capex)</span>
+
+<span class="sd">    :return:</span>
+<span class="sd">        np.array: fitness of capex</span>
+<span class="sd">    :rtype np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">capex</span></div>
+
+
+
+<div class="viewcode-block" id="calc_fitness_vpn">
+<a class="viewcode-back" href="../../utils.html#utils.model_utils.calc_fitness_vpn">[docs]</a>
+<span class="k">def</span> <span class="nf">calc_fitness_vpn</span><span class="p">(</span><span class="n">vpn</span><span class="p">,</span> <span class="n">goal</span><span class="p">,</span> <span class="n">coefficient</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Method to calculate the fitness of vpn used in a solution</span>
+
+<span class="sd">    :param vpn: array with the vpn of projects for all years</span>
+<span class="sd">    :type vpn: np.array</span>
+<span class="sd">    :param goal: parameter with the goal for vpn</span>
+<span class="sd">    :type goal: float</span>
+<span class="sd">    :param coefficient: Parameter that gives weight to the fitness</span>
+<span class="sd">    :type coefficient: float</span>
+
+<span class="sd">    :Usage:</span>
+
+<span class="sd">    self.calc_fitness_vpn(vpn,20, 0.25)</span>
+
+<span class="sd">    :return:</span>
+<span class="sd">        np.array: fitness of vpn</span>
+<span class="sd">    :rtype np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">vpn</span> <span class="o">/</span> <span class="n">goal</span><span class="p">)</span> <span class="o">*</span> <span class="n">coefficient</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Cristiam_accenture.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

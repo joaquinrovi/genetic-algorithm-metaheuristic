@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>axis package &mdash; Modelo_portafolio 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=8d563738"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Modelo_portafolio
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">axis package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-axis.axis">axis.axis module</a><ul>
+<li><a class="reference internal" href="#axis.axis.Axis"><code class="docutils literal notranslate"><span class="pre">Axis</span></code></a><ul>
+<li><a class="reference internal" href="#axis.axis.Axis.axis"><code class="docutils literal notranslate"><span class="pre">Axis.axis()</span></code></a></li>
+<li><a class="reference internal" href="#axis.axis.Axis.get_metrics_depend_projects_on"><code class="docutils literal notranslate"><span class="pre">Axis.get_metrics_depend_projects_on()</span></code></a></li>
+<li><a class="reference internal" href="#axis.axis.Axis.get_outputs"><code class="docutils literal notranslate"><span class="pre">Axis.get_outputs()</span></code></a></li>
+<li><a class="reference internal" href="#axis.axis.Axis.project_goals_depend_on_portfolio"><code class="docutils literal notranslate"><span class="pre">Axis.project_goals_depend_on_portfolio()</span></code></a></li>
+<li><a class="reference internal" href="#axis.axis.Axis.project_goals_initial_metrics"><code class="docutils literal notranslate"><span class="pre">Axis.project_goals_initial_metrics()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-axis">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Modelo_portafolio</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">axis package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/axis.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="axis-package">
+<h1>axis package<a class="headerlink" href="#axis-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-axis.axis">
+<span id="axis-axis-module"></span><h2>axis.axis module<a class="headerlink" href="#module-axis.axis" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="axis.axis.Axis">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">axis.axis.</span></span><span class="sig-name descname"><span class="pre">Axis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_up</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/axis/axis.html#Axis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#axis.axis.Axis" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This is a  class, to calculate metrics per project, the sostec and finance axis</p>
+<dl class="field-list simple">
+<dt class="field-odd">Usage<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<p>from axis.axis import Axis</p>
+<p>axis_instance = Axis(df_input,parameters)
+axis_instance.axis()</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="axis.axis.Axis.axis">
+<span class="sig-name descname"><span class="pre">axis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/axis/axis.html#Axis.axis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#axis.axis.Axis.axis" title="Link to this definition"></a></dt>
+<dd><p>This function calculate the project axis of a portfolio
+:param df: DataFrame with metrics per project
+:param i: portfolio number in which goals are calculated
+:return: DataFrame with axis per project</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="axis.axis.Axis.get_metrics_depend_projects_on">
+<span class="sig-name descname"><span class="pre">get_metrics_depend_projects_on</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">projects</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/axis/axis.html#Axis.get_metrics_depend_projects_on"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#axis.axis.Axis.get_metrics_depend_projects_on" title="Link to this definition"></a></dt>
+<dd><p>This function calculate the metrics that depend on the projects of a portfolio
+:param df: DataFrame with the metrics per year and project to add the new metrics
+:param projects: list with the ‘MATRICULA_DIGITAL’ of projects from a portfolio
+:return: DataFrame with additional metrics per year and project</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="axis.axis.Axis.get_outputs">
+<span class="sig-name descname"><span class="pre">get_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_results</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/axis/axis.html#Axis.get_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#axis.axis.Axis.get_outputs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="axis.axis.Axis.project_goals_depend_on_portfolio">
+<span class="sig-name descname"><span class="pre">project_goals_depend_on_portfolio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/axis/axis.html#Axis.project_goals_depend_on_portfolio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#axis.axis.Axis.project_goals_depend_on_portfolio" title="Link to this definition"></a></dt>
+<dd><p>This function calculate the project goals that depend on portfolio
+:param df: DataFrame with metrics per year and project
+:param i: portfolio number in which goals are calculated
+:return: DataFrame with goals per projects</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="axis.axis.Axis.project_goals_initial_metrics">
+<span class="sig-name descname"><span class="pre">project_goals_initial_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/axis/axis.html#Axis.project_goals_initial_metrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#axis.axis.Axis.project_goals_initial_metrics" title="Link to this definition"></a></dt>
+<dd><p>This function calculate the goals per project in the initial operation
+:param df: DataFrame with metrics per year and project
+:return: DataFrame with goals per projects</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-axis">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-axis" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Cristiam_accenture.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

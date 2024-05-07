@@ -1,0 +1,186 @@
+{
+    "data_types_config": {"dbfs_path": "/dbfs/FileStore/ESMModel/bronze/ESM_Datatype.xlsx"},
+    "metastore_tables_config": {
+        "esm_model_tables": {
+            "setup": [
+                {"db_name": "esm_model", "table_name": "flujo_caja"},
+                {"db_name": "esm_model", "table_name": "esm_optimizacion"}
+            ]
+        }
+    },
+    "raw_files_read_config": {
+        "plp": {
+            "dbfs_path": "/dbfs/FileStore/ESMModel/bronze/PLP.xlsx",
+            "setup": [
+                {
+                    "sheet_name": "Upstream",
+                    "header": 2,
+                    "engine": "openpyxl",
+                    "db_name": "esm_model",
+                    "table_name": "plp_upstream",
+                    "delete_unnamed_cols_if_full_nan": true,
+                    "sheet_name_data_types": "plp_upstream"
+                }
+            ]
+        },
+        "formato_peep_crudos_portafolio": {
+            "dbfs_path": "/dbfs/FileStore/ESMModel/bronze/Formato_PEEP_Crudos_Portafolio_2023.xlsx",
+            "setup": [
+                {
+                    "sheet_name": "Offset Calidad",
+                    "header": 3,
+                    "engine": "openpyxl",
+                    "db_name": "esm_model",
+                    "table_name": "crudos_portafolio_oc",
+                    "delete_unnamed_cols_if_full_nan": true,
+                    "sheet_name_data_types": "crudos_portafolio_oc",
+                    "rows_to_delete": ["0-19"],
+                    "change_dtype": [["Nombre", "int"]],
+                    "order_by": {"columns": ["Nombre"], "order": ["asc"]}
+                },
+                {
+                    "sheet_name": "Offset Calidad",
+                    "header": 2,
+                    "engine": "openpyxl",
+                    "db_name": "esm_model",
+                    "table_name": "crudos_portafolio_oc_v2",
+                    "delete_unnamed_cols_if_full_nan": true,
+                    "sheet_name_data_types": "crudos_portafolio_oc_v2",
+                    "config_type": 1,
+                    "rows_to_delete": ["1-20"],
+                    "order_by": {"columns": ["Código"], "order": ["asc"]}
+                },
+                {
+                    "sheet_name": "Offset Transporte tarifa costo",
+                    "header": 3,
+                    "engine": "openpyxl",
+                    "db_name": "esm_model",
+                    "table_name": "crudos_portafolio_ot",
+                    "delete_unnamed_cols_if_full_nan": true,
+                    "sheet_name_data_types": "crudos_portafolio_ot",
+                    "rows_to_delete": ["0-19"],
+                    "change_dtype": [["Nombre", "int"]],
+                    "order_by": {"columns": ["Nombre"], "order": ["asc"]}
+                },
+                {
+                    "sheet_name": "Offset Transporte tarifa costo",
+                    "header": 2,
+                    "engine": "openpyxl",
+                    "db_name": "esm_model",
+                    "table_name": "crudos_portafolio_ot_v2",
+                    "delete_unnamed_cols_if_full_nan": true,
+                    "sheet_name_data_types": "crudos_portafolio_oc_v2",
+                    "config_type": 1,
+                    "rows_to_delete": ["1-20"],
+                    "order_by": {"columns": ["Código"], "order": ["asc"]}
+                },
+                {
+                    "sheet_name": "Pas. mol. dil. tarifa costo",
+                    "header": 3,
+                    "engine": "openpyxl",
+                    "db_name": "esm_model",
+                    "table_name": "crudos_portafolio_pm",
+                    "delete_unnamed_cols_if_full_nan": true,
+                    "sheet_name_data_types": "crudos_portafolio_pm",
+                    "rows_to_delete": ["0-19"],
+                    "change_dtype": [["Nombre", "int"]],
+                    "order_by": {"columns": ["Nombre"], "order": ["asc"]}
+                },
+                {
+                    "sheet_name": "Pas. mol. dil. tarifa costo",
+                    "header": 2,
+                    "engine": "openpyxl",
+                    "db_name": "esm_model",
+                    "table_name": "crudos_portafolio_pm_v2",
+                    "delete_unnamed_cols_if_full_nan": true,
+                    "sheet_name_data_types": "crudos_portafolio_oc_v2",
+                    "config_type": 1,
+                    "rows_to_delete": ["1-20"],
+                    "order_by": {"columns": ["Código"], "order": ["asc"]}
+                },
+                {
+                    "sheet_name": "Precio neto (con tarifa costo)",
+                    "header": 3,
+                    "engine": "openpyxl",
+                    "db_name": "esm_model",
+                    "table_name": "crudos_portafolio_pn",
+                    "delete_unnamed_cols_if_full_nan": true,
+                    "sheet_name_data_types": "crudos_portafolio_pn",
+                    "rows_to_delete": ["0-19"],
+                    "change_dtype": [["Nombre", "int"]],
+                    "order_by": {"columns": ["Nombre"], "order": ["asc"]}
+                },
+                {
+                    "sheet_name": "Precio neto (con tarifa costo)",
+                    "header": 2,
+                    "engine": "openpyxl",
+                    "db_name": "esm_model",
+                    "table_name": "crudos_portafolio_pn_v2",
+                    "delete_unnamed_cols_if_full_nan": true,
+                    "sheet_name_data_types": "crudos_portafolio_oc_v2",
+                    "config_type": 1,
+                    "rows_to_delete": ["1-20"],
+                    "order_by": {"columns": ["Código"], "order": ["asc"]}
+                }
+            ]
+        },
+        "factores_de_dilucion": {
+            "dbfs_path": "/dbfs/FileStore/ESMModel/bronze/Factores_de_dilución.xlsx",
+            "setup": [
+                {
+                    "sheet_name": "Factor de dilución",
+                    "header": 0,
+                    "engine": "openpyxl",
+                    "db_name": "esm_model",
+                    "table_name": "factores_dilucion_fd",
+                    "delete_unnamed_cols_if_full_nan": true,
+                    "sheet_name_data_types": "factores_dilucion_fd"
+                }
+            ]
+        },
+        "intensidad_emisiones_co2e": {
+            "dbfs_path": "/dbfs/FileStore/ESMModel/bronze/INTENSIDAD_DE_EMISIONES_DE_CO2E.xlsx",
+            "setup": [
+                {
+                    "sheet_name": "upstream",
+                    "header": 0,
+                    "engine": "openpyxl",
+                    "db_name": "esm_model",
+                    "table_name": "intensidad_emisiones_up",
+                    "delete_unnamed_cols_if_full_nan": true,
+                    "sheet_name_data_types": "intensidad_emisiones_up",
+                    "transform_column_dtype": [["intensidad", "float"]]
+                }
+            ]
+        },
+        "formato_peep_gas_portafolio_ecp": {
+            "dbfs_path": "/dbfs/FileStore/ESMModel/bronze/Formato_PEEP_GAS_Portafolio_2023_ECP.xlsx",
+            "setup": [
+                {
+                    "sheet_name": "Precio Neto Básica",
+                    "header": 12,
+                    "engine": "openpyxl",
+                    "db_name": "esm_model",
+                    "table_name": "gas_portafolio_pnb",
+                    "delete_unnamed_cols_if_full_nan": true,
+                    "sheet_name_data_types": "gas_portafolio_pnb",
+                    "rows_to_delete": ["0-8"],
+                    "change_dtype": [["Product", "int"]],
+                    "order_by": {"columns": ["Product"], "order": ["asc"]}
+                },
+                {
+                    "sheet_name": "Precio Neto Básica",
+                    "header": 12,
+                    "engine": "openpyxl",
+                    "db_name": "esm_model",
+                    "table_name": "gas_portafolio_pnb_v2",
+                    "delete_unnamed_cols_if_full_nan": true,
+                    "sheet_name_data_types": "gas_portafolio_pnb_v2",
+                    "config_type": 2,
+                    "rows_to_delete": ["0-8"],
+                    "order_by": {"columns": ["Product"], "order": ["asc"]}
+                }
+            ]
+        }
+    }
+}

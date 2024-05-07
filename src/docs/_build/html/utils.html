@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>utils package &mdash; Modelo_portafolio 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=8d563738"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Modelo_portafolio
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">utils package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-utils.databricks_filesystem">utils.databricks_filesystem module</a><ul>
+<li><a class="reference internal" href="#utils.databricks_filesystem.DatabricksFileSystem"><code class="docutils literal notranslate"><span class="pre">DatabricksFileSystem</span></code></a><ul>
+<li><a class="reference internal" href="#utils.databricks_filesystem.DatabricksFileSystem.create"><code class="docutils literal notranslate"><span class="pre">DatabricksFileSystem.create()</span></code></a></li>
+<li><a class="reference internal" href="#utils.databricks_filesystem.DatabricksFileSystem.delete"><code class="docutils literal notranslate"><span class="pre">DatabricksFileSystem.delete()</span></code></a></li>
+<li><a class="reference internal" href="#utils.databricks_filesystem.DatabricksFileSystem.read"><code class="docutils literal notranslate"><span class="pre">DatabricksFileSystem.read()</span></code></a></li>
+<li><a class="reference internal" href="#utils.databricks_filesystem.DatabricksFileSystem.update"><code class="docutils literal notranslate"><span class="pre">DatabricksFileSystem.update()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#utils-databricks-hivemetastore-module">utils.databricks_hivemetastore module</a></li>
+<li><a class="reference internal" href="#utils-general-utils-module">utils.general_utils module</a></li>
+<li><a class="reference internal" href="#module-utils.logger">utils.logger module</a><ul>
+<li><a class="reference internal" href="#utils.logger.Logger"><code class="docutils literal notranslate"><span class="pre">Logger</span></code></a><ul>
+<li><a class="reference internal" href="#utils.logger.Logger.get_logger"><code class="docutils literal notranslate"><span class="pre">Logger.get_logger()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#utils.logger.Singleton"><code class="docutils literal notranslate"><span class="pre">Singleton</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-utils.model_utils">utils.model_utils module</a><ul>
+<li><a class="reference internal" href="#utils.model_utils.append_column_solution"><code class="docutils literal notranslate"><span class="pre">append_column_solution()</span></code></a></li>
+<li><a class="reference internal" href="#utils.model_utils.calc_fitness_access_gas"><code class="docutils literal notranslate"><span class="pre">calc_fitness_access_gas()</span></code></a></li>
+<li><a class="reference internal" href="#utils.model_utils.calc_fitness_access_water"><code class="docutils literal notranslate"><span class="pre">calc_fitness_access_water()</span></code></a></li>
+<li><a class="reference internal" href="#utils.model_utils.calc_fitness_capex"><code class="docutils literal notranslate"><span class="pre">calc_fitness_capex()</span></code></a></li>
+<li><a class="reference internal" href="#utils.model_utils.calc_fitness_co2"><code class="docutils literal notranslate"><span class="pre">calc_fitness_co2()</span></code></a></li>
+<li><a class="reference internal" href="#utils.model_utils.calc_fitness_cti"><code class="docutils literal notranslate"><span class="pre">calc_fitness_cti()</span></code></a></li>
+<li><a class="reference internal" href="#utils.model_utils.calc_fitness_ebitda"><code class="docutils literal notranslate"><span class="pre">calc_fitness_ebitda()</span></code></a></li>
+<li><a class="reference internal" href="#utils.model_utils.calc_fitness_energy"><code class="docutils literal notranslate"><span class="pre">calc_fitness_energy()</span></code></a></li>
+<li><a class="reference internal" href="#utils.model_utils.calc_fitness_global_nation"><code class="docutils literal notranslate"><span class="pre">calc_fitness_global_nation()</span></code></a></li>
+<li><a class="reference internal" href="#utils.model_utils.calc_fitness_gross"><code class="docutils literal notranslate"><span class="pre">calc_fitness_gross()</span></code></a></li>
+<li><a class="reference internal" href="#utils.model_utils.calc_fitness_km"><code class="docutils literal notranslate"><span class="pre">calc_fitness_km()</span></code></a></li>
+<li><a class="reference internal" href="#utils.model_utils.calc_fitness_low_emissions"><code class="docutils literal notranslate"><span class="pre">calc_fitness_low_emissions()</span></code></a></li>
+<li><a class="reference internal" href="#utils.model_utils.calc_fitness_not_oil_jobs"><code class="docutils literal notranslate"><span class="pre">calc_fitness_not_oil_jobs()</span></code></a></li>
+<li><a class="reference internal" href="#utils.model_utils.calc_fitness_students"><code class="docutils literal notranslate"><span class="pre">calc_fitness_students()</span></code></a></li>
+<li><a class="reference internal" href="#utils.model_utils.calc_fitness_vpn"><code class="docutils literal notranslate"><span class="pre">calc_fitness_vpn()</span></code></a></li>
+<li><a class="reference internal" href="#utils.model_utils.calc_fitness_water"><code class="docutils literal notranslate"><span class="pre">calc_fitness_water()</span></code></a></li>
+<li><a class="reference internal" href="#utils.model_utils.check_capex"><code class="docutils literal notranslate"><span class="pre">check_capex()</span></code></a></li>
+<li><a class="reference internal" href="#utils.model_utils.check_isa"><code class="docutils literal notranslate"><span class="pre">check_isa()</span></code></a></li>
+<li><a class="reference internal" href="#utils.model_utils.check_length"><code class="docutils literal notranslate"><span class="pre">check_length()</span></code></a></li>
+<li><a class="reference internal" href="#utils.model_utils.filter_projects"><code class="docutils literal notranslate"><span class="pre">filter_projects()</span></code></a></li>
+<li><a class="reference internal" href="#utils.model_utils.generate_initial_population"><code class="docutils literal notranslate"><span class="pre">generate_initial_population()</span></code></a></li>
+<li><a class="reference internal" href="#utils.model_utils.get_basic_index"><code class="docutils literal notranslate"><span class="pre">get_basic_index()</span></code></a></li>
+<li><a class="reference internal" href="#utils.model_utils.get_capex_portfolio"><code class="docutils literal notranslate"><span class="pre">get_capex_portfolio()</span></code></a></li>
+<li><a class="reference internal" href="#utils.model_utils.get_down_projects_params"><code class="docutils literal notranslate"><span class="pre">get_down_projects_params()</span></code></a></li>
+<li><a class="reference internal" href="#utils.model_utils.get_flujo_portfolio"><code class="docutils literal notranslate"><span class="pre">get_flujo_portfolio()</span></code></a></li>
+<li><a class="reference internal" href="#utils.model_utils.get_indexes_isa"><code class="docutils literal notranslate"><span class="pre">get_indexes_isa()</span></code></a></li>
+<li><a class="reference internal" href="#utils.model_utils.get_indexes_turn_off"><code class="docutils literal notranslate"><span class="pre">get_indexes_turn_off()</span></code></a></li>
+<li><a class="reference internal" href="#utils.model_utils.get_mid_projects_params"><code class="docutils literal notranslate"><span class="pre">get_mid_projects_params()</span></code></a></li>
+<li><a class="reference internal" href="#utils.model_utils.get_off_actives"><code class="docutils literal notranslate"><span class="pre">get_off_actives()</span></code></a></li>
+<li><a class="reference internal" href="#utils.model_utils.get_project_params"><code class="docutils literal notranslate"><span class="pre">get_project_params()</span></code></a></li>
+<li><a class="reference internal" href="#utils.model_utils.get_projects"><code class="docutils literal notranslate"><span class="pre">get_projects()</span></code></a></li>
+<li><a class="reference internal" href="#utils.model_utils.get_semi_mandatory_on"><code class="docutils literal notranslate"><span class="pre">get_semi_mandatory_on()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Modelo_portafolio</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">utils package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/utils.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="utils-package">
+<h1>utils package<a class="headerlink" href="#utils-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-utils.databricks_filesystem">
+<span id="utils-databricks-filesystem-module"></span><h2>utils.databricks_filesystem module<a class="headerlink" href="#module-utils.databricks_filesystem" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="utils.databricks_filesystem.DatabricksFileSystem">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">utils.databricks_filesystem.</span></span><span class="sig-name descname"><span class="pre">DatabricksFileSystem</span></span><a class="reference internal" href="_modules/utils/databricks_filesystem.html#DatabricksFileSystem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.databricks_filesystem.DatabricksFileSystem" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This is a conceptual class representation of Databricks’ filesystem interaction using pandas.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Usage<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<p>from utils.databricks_filesystem import DatabricksFileSystem</p>
+<p>dbfs = DatabricksFileSystem()
+dbfs.create(dbfs_path=’/dbfs/FileStore/my_dataframe.xlsx’, df=my_dataframe)
+df = dbfs.read(dbfs_path=’/dbfs/FileStore/my_dataframe.xlsx’)</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.databricks_filesystem.DatabricksFileSystem.create">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dbfs_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/databricks_filesystem.html#DatabricksFileSystem.create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.databricks_filesystem.DatabricksFileSystem.create" title="Link to this definition"></a></dt>
+<dd><p>Writes a DataFrame to a specified path in Databricks’ filesystem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dbfs_path</strong> (<em>str</em>) – The path in Databricks’ filesystem to write the DataFrame.</p></li>
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – The DataFrame to write.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Usage<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<p>dbfs.create(dbfs_path=’/dbfs/FileStore/my_dataframe.xlsx’, df=my_dataframe)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.databricks_filesystem.DatabricksFileSystem.delete">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dbfs_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/databricks_filesystem.html#DatabricksFileSystem.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.databricks_filesystem.DatabricksFileSystem.delete" title="Link to this definition"></a></dt>
+<dd><p>Deletes a file from a specified path in Databricks’ filesystem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dbfs_path</strong> (<em>str</em>) – The path in Databricks’ filesystem of the file to delete.</p>
+</dd>
+<dt class="field-even">Usage<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<p>dbfs.delete(dbfs_path=’/dbfs/FileStore/my_dataframe.xlsx’)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.databricks_filesystem.DatabricksFileSystem.read">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dbfs_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/databricks_filesystem.html#DatabricksFileSystem.read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.databricks_filesystem.DatabricksFileSystem.read" title="Link to this definition"></a></dt>
+<dd><p>Reads a file from a specified path in Databricks’ filesystem into a DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dbfs_path</strong> (<em>str</em>) – The path in Databricks’ filesystem from which to read the file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The DataFrame containing the file’s data.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+<dt class="field-even">Usage<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<p>df = dbfs.read(dbfs_path=’/dbfs/FileStore/my_dataframe.xlsx’)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.databricks_filesystem.DatabricksFileSystem.update">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dbfs_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/databricks_filesystem.html#DatabricksFileSystem.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.databricks_filesystem.DatabricksFileSystem.update" title="Link to this definition"></a></dt>
+<dd><p>Overwrites an existing file in Databricks’ filesystem with a DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dbfs_path</strong> (<em>str</em>) – The path in Databricks’ filesystem of the file to overwrite.</p></li>
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – The DataFrame to write.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Usage<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<p>dbfs.update(dbfs_path=’/dbfs/FileStore/my_dataframe.xlsx’, df=my_updated_dataframe)</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="utils-databricks-hivemetastore-module">
+<h2>utils.databricks_hivemetastore module<a class="headerlink" href="#utils-databricks-hivemetastore-module" title="Link to this heading"></a></h2>
+</section>
+<section id="utils-general-utils-module">
+<h2>utils.general_utils module<a class="headerlink" href="#utils-general-utils-module" title="Link to this heading"></a></h2>
+</section>
+<section id="module-utils.logger">
+<span id="utils-logger-module"></span><h2>utils.logger module<a class="headerlink" href="#module-utils.logger" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="utils.logger.Logger">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">utils.logger.</span></span><span class="sig-name descname"><span class="pre">Logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/logger.html#Logger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.logger.Logger" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Logger is a class for application-level logging. It provides methods to write log messages to standard output.
+Log messages include timestamp, script name and line number, log level and the message itself.</p>
+<p>This class follows Singleton pattern to avoid duplicate log messages.</p>
+<p>Usage:
+from logger import Logger</p>
+<p>logger = Logger(“MyScript”).get_logger()
+logger.info(“This is an info message”)</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.logger.Logger.get_logger">
+<span class="sig-name descname"><span class="pre">get_logger</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Logger</span></span></span><a class="reference internal" href="_modules/utils/logger.html#Logger.get_logger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.logger.Logger.get_logger" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Returns the logger instance.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>logging.Logger</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="utils.logger.Singleton">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">utils.logger.</span></span><span class="sig-name descname"><span class="pre">Singleton</span></span><a class="reference internal" href="_modules/utils/logger.html#Singleton"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.logger.Singleton" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></p>
+<p>Singleton is a metaclass for creating singleton classes. Singleton classes are classes that can have only one
+instance at any time. It means if you create an object and try to create another one, the same instance will be returned.</p>
+<p>Usage:
+from logger import Singleton</p>
+<dl class="simple">
+<dt>class Logger(metaclass=Singleton):</dt><dd><p>…</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-utils.model_utils">
+<span id="utils-model-utils-module"></span><h2>utils.model_utils module<a class="headerlink" href="#module-utils.model_utils" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.model_utils.append_column_solution">
+<span class="sig-prename descclassname"><span class="pre">utils.model_utils.</span></span><span class="sig-name descname"><span class="pre">append_column_solution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_optional</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df_mandatory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df_zeros</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df_semi_mandatory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">portfolios</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">portfolios_semi_mandatory</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/model_utils.html#append_column_solution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.model_utils.append_column_solution" title="Link to this definition"></a></dt>
+<dd><p>Function that joins the portfolios of the optional projects and appends the mandatory and
+vpn zero projects, while adding some columns that improve the understanding of the results DataFrame.
+The returned df of this function is later stored as a table</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df_optional</strong> (<em>DataFrame</em>) – DataFrame with the optional projects evaluated by the model</p></li>
+<li><p><strong>df_mandatory</strong> (<em>DataFrame</em>) – DataFrame with the mandatory projects</p></li>
+<li><p><strong>df_zeros</strong> (<em>DataFrame</em>) – DataFrame with the vpn zero projects</p></li>
+<li><p><strong>df_semi_mandatory</strong> (<em>DataFrame</em>) – DataFrame with the df_semi_mandatory projects</p></li>
+<li><p><strong>portfolios</strong> – list with the different portfolios generated by the model</p></li>
+<li><p><strong>portfolios_semi_mandatory</strong> – list with the different portfolios generated by the model for semi_mandatory</p></li>
+</ul>
+</dd>
+</dl>
+<p>projects
+:type config: list</p>
+<p>Return: DataFrame with all the projects and portfolios generated by the model
+:rtype DataFrame</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.model_utils.calc_fitness_access_gas">
+<span class="sig-prename descclassname"><span class="pre">utils.model_utils.</span></span><span class="sig-name descname"><span class="pre">calc_fitness_access_gas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_gas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">goal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficient</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/model_utils.html#calc_fitness_access_gas"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.model_utils.calc_fitness_access_gas" title="Link to this definition"></a></dt>
+<dd><p>Method to calculate the fitness of access_gas used in a solution</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>access_gas</strong> (<em>np.array</em>) – array with the access_gas of projects for all years</p></li>
+<li><p><strong>goal</strong> (<em>float</em>) – parameter with the goal for access_gas</p></li>
+<li><p><strong>coefficient</strong> (<em>float</em>) – Parameter that gives weight to the fitness</p></li>
+</ul>
+</dd>
+<dt class="field-even">Usage<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<p>self.calc_fitness_access_gas(access_gas,20, 0.25)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.array: fitness of access_gas</p>
+</dd>
+</dl>
+<p>:rtype np.array</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.model_utils.calc_fitness_access_water">
+<span class="sig-prename descclassname"><span class="pre">utils.model_utils.</span></span><span class="sig-name descname"><span class="pre">calc_fitness_access_water</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_water</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">goal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficient</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/model_utils.html#calc_fitness_access_water"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.model_utils.calc_fitness_access_water" title="Link to this definition"></a></dt>
+<dd><p>Method to calculate the fitness of access_water used in a solution</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>access_water</strong> (<em>np.array</em>) – array with the access_water of projects for all years</p></li>
+<li><p><strong>goal</strong> (<em>float</em>) – parameter with the goal for access_water</p></li>
+<li><p><strong>coefficient</strong> (<em>float</em>) – Parameter that gives weight to the fitness</p></li>
+</ul>
+</dd>
+<dt class="field-even">Usage<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<p>self.calc_fitness_access_water(access_water,20, 0.25)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.array: fitness of access_water</p>
+</dd>
+</dl>
+<p>:rtype np.array</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.model_utils.calc_fitness_capex">
+<span class="sig-prename descclassname"><span class="pre">utils.model_utils.</span></span><span class="sig-name descname"><span class="pre">calc_fitness_capex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">capex</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/model_utils.html#calc_fitness_capex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.model_utils.calc_fitness_capex" title="Link to this definition"></a></dt>
+<dd><p>Method to calculate the fitness of capex used in a solution</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>capex</strong> (<em>np.array</em>) – array with the capex of projects for all years</p>
+</dd>
+<dt class="field-even">Usage<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<p>self.calc_fitness_capex(capex)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.array: fitness of capex</p>
+</dd>
+</dl>
+<p>:rtype np.array</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.model_utils.calc_fitness_co2">
+<span class="sig-prename descclassname"><span class="pre">utils.model_utils.</span></span><span class="sig-name descname"><span class="pre">calc_fitness_co2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">co2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actual</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficient</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/model_utils.html#calc_fitness_co2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.model_utils.calc_fitness_co2" title="Link to this definition"></a></dt>
+<dd><p>Method calculate the fitness of co2 used in a solution</p>
+<dl class="field-list simple">
+<dt class="field-odd">Usage<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<p>self.penalize_co2(co2, 0.25)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>co2</strong> (<em>np.array</em>) – array with the quantity of co2 for all years</p></li>
+<li><p><strong>actual</strong> (<em>float</em>) – Actual value present in the model config</p></li>
+<li><p><strong>coefficient</strong> (<em>float</em>) – Parameter that gives weight to the fitness</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.array: fitness of co2 for each year</p>
+</dd>
+</dl>
+<p>:rtype np.array</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.model_utils.calc_fitness_cti">
+<span class="sig-prename descclassname"><span class="pre">utils.model_utils.</span></span><span class="sig-name descname"><span class="pre">calc_fitness_cti</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cti</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">goal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficient</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/model_utils.html#calc_fitness_cti"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.model_utils.calc_fitness_cti" title="Link to this definition"></a></dt>
+<dd><p>Method to calculate the fitness of ct+i ebitda used in a solution</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cti</strong> (<em>np.array</em>) – array with the ct+i ebitda of projects for all years</p></li>
+<li><p><strong>goal</strong> (<em>float</em>) – goal value present in the model config</p></li>
+<li><p><strong>coefficient</strong> (<em>float</em>) – Parameter that gives weight to the fitness</p></li>
+</ul>
+</dd>
+<dt class="field-even">Usage<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<p>self.calc_fitness_cti(cti,20, 0.25)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.array: fitness of ct+i</p>
+</dd>
+</dl>
+<p>:rtype np.array</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.model_utils.calc_fitness_ebitda">
+<span class="sig-prename descclassname"><span class="pre">utils.model_utils.</span></span><span class="sig-name descname"><span class="pre">calc_fitness_ebitda</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">total_ebitda</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minimum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficient</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/model_utils.html#calc_fitness_ebitda"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.model_utils.calc_fitness_ebitda" title="Link to this definition"></a></dt>
+<dd><p>Method to calculate the fitness of ebitda for a solution</p>
+<dl class="field-list simple">
+<dt class="field-odd">Usage<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<p>self.penalize_ebitda(ebitda, 0.25)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>total_ebitda</strong> (<em>np.array</em>) – array with the total ebitda for all years</p></li>
+<li><p><strong>minimum</strong> (<em>float</em>) – minimum value present in the model config</p></li>
+<li><p><strong>coefficient</strong> (<em>float</em>) – Parameter that gives weight to the fitness</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.array: fitness of ebitda</p>
+</dd>
+</dl>
+<p>:rtype np.array</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.model_utils.calc_fitness_energy">
+<span class="sig-prename descclassname"><span class="pre">utils.model_utils.</span></span><span class="sig-name descname"><span class="pre">calc_fitness_energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">energy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">goal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficient</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/model_utils.html#calc_fitness_energy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.model_utils.calc_fitness_energy" title="Link to this definition"></a></dt>
+<dd><p>Method to calculate the fitness energy used in a solution</p>
+<dl class="field-list simple">
+<dt class="field-odd">Usage<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<p>self.penalize_energy(energy, 0.25)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>energy</strong> (<em>np.array</em>) – array with the quantity of energy for all years</p></li>
+<li><p><strong>goal</strong> (<em>float</em>) – Goal value present in the model config</p></li>
+<li><p><strong>coefficient</strong> (<em>float</em>) – Parameter that gives weight to the fitness</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.array: fitness energy</p>
+</dd>
+</dl>
+<p>:rtype np.array</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.model_utils.calc_fitness_global_nation">
+<span class="sig-prename descclassname"><span class="pre">utils.model_utils.</span></span><span class="sig-name descname"><span class="pre">calc_fitness_global_nation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">total_global_nation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minimum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficient</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/model_utils.html#calc_fitness_global_nation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.model_utils.calc_fitness_global_nation" title="Link to this definition"></a></dt>
+<dd><p>Method to calculate the average of nation transfer throughout the years</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>total_global_nation</strong> (<em>np.array</em>) – array with the total global nation for each year</p></li>
+<li><p><strong>minimum</strong> (<em>float</em>) – minimum value present in the model config</p></li>
+<li><p><strong>coefficient</strong> (<em>float</em>) – weight applied to the fitness</p></li>
+</ul>
+</dd>
+<dt class="field-even">Usage<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<p>self.penalize_global_nation(total_global_nation, 0.25)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.array: fitness of global nation per year</p>
+</dd>
+</dl>
+<p>:rtype np.array</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.model_utils.calc_fitness_gross">
+<span class="sig-prename descclassname"><span class="pre">utils.model_utils.</span></span><span class="sig-name descname"><span class="pre">calc_fitness_gross</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">total_ebitda</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deuda</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ratio</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficient</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">per_project</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_fit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/model_utils.html#calc_fitness_gross"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.model_utils.calc_fitness_gross" title="Link to this definition"></a></dt>
+<dd><p>Method to calculate the fitness of the gross for a solution</p>
+<dl class="field-list simple">
+<dt class="field-odd">Usage<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<p>self.penalize_gross(ebidta, 0.25)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>total_ebitda</strong> (<em>np.array</em>) – array with the total ebitda for all years</p></li>
+<li><p><strong>deuda</strong> (<em>np.array</em>) – array with the deuda restriction</p></li>
+<li><p><strong>ratio</strong> (<em>float</em>) – ratio present in the config</p></li>
+<li><p><strong>coefficient</strong> (<em>float</em>) – Parameter that gives weight to the fitness</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.array: fitness of gross</p>
+</dd>
+</dl>
+<p>:rtype np.array</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.model_utils.calc_fitness_km">
+<span class="sig-prename descclassname"><span class="pre">utils.model_utils.</span></span><span class="sig-name descname"><span class="pre">calc_fitness_km</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">km</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">goal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficient</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/model_utils.html#calc_fitness_km"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.model_utils.calc_fitness_km" title="Link to this definition"></a></dt>
+<dd><p>Method to calculate the fitness of km used in a solution</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>km</strong> (<em>np.array</em>) – array with the km of projects for all years</p></li>
+<li><p><strong>goal</strong> (<em>float</em>) – parameter with the goal for km</p></li>
+<li><p><strong>coefficient</strong> (<em>float</em>) – Parameter that gives weight to the fitness</p></li>
+</ul>
+</dd>
+<dt class="field-even">Usage<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<p>self.calc_fitness_km(km,20, 0.25)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.array: fitness of km</p>
+</dd>
+</dl>
+<p>:rtype np.array</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.model_utils.calc_fitness_low_emissions">
+<span class="sig-prename descclassname"><span class="pre">utils.model_utils.</span></span><span class="sig-name descname"><span class="pre">calc_fitness_low_emissions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">total_ebitda</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_low_ebitda</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minimum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficient</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">goal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/model_utils.html#calc_fitness_low_emissions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.model_utils.calc_fitness_low_emissions" title="Link to this definition"></a></dt>
+<dd><p>Method  to calculate the fitness of low emissions used in a solution</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>total_low_ebitda</strong> (<em>np.array</em>) – array with the total sum of low emissions projects for all years</p></li>
+<li><p><strong>total_ebitda</strong> (<em>np.array</em>) – array with the total sum of all projects ebitda for all years</p></li>
+<li><p><strong>minimum</strong> (<em>float</em>) – minimum value present in the model config</p></li>
+<li><p><strong>coefficient</strong> (<em>float</em>) – Parameter that gives weight to the fitness</p></li>
+<li><p><strong>goal</strong> (<em>bool</em>) – Parameter that tells if we just want the goal or if we want the fitness</p></li>
+</ul>
+</dd>
+<dt class="field-even">Usage<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<p>self.penalize_low_emissions(ebidta, low_emission_ebidta, 0.25)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.array: fitness low emission</p>
+</dd>
+</dl>
+<p>:rtype np.array</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.model_utils.calc_fitness_not_oil_jobs">
+<span class="sig-prename descclassname"><span class="pre">utils.model_utils.</span></span><span class="sig-name descname"><span class="pre">calc_fitness_not_oil_jobs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">not_oil_jobs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">goal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficient</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/model_utils.html#calc_fitness_not_oil_jobs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.model_utils.calc_fitness_not_oil_jobs" title="Link to this definition"></a></dt>
+<dd><p>Method to calculate the fitness of not oil jobs used in a solution</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>not_oil_jobs</strong> (<em>np.array</em>) – array with the not_oil_jobs of projects for all years</p></li>
+<li><p><strong>goal</strong> (<em>float</em>) – parameter with the goal for not_oil_jobs</p></li>
+<li><p><strong>coefficient</strong> (<em>float</em>) – Parameter that gives weight to the fitness</p></li>
+</ul>
+</dd>
+<dt class="field-even">Usage<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<p>self.calc_fitness_not_oil_jobs(not_oil_jobs,20, 0.25)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.array: fitness of not_oil_jobs</p>
+</dd>
+</dl>
+<p>:rtype np.array</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.model_utils.calc_fitness_students">
+<span class="sig-prename descclassname"><span class="pre">utils.model_utils.</span></span><span class="sig-name descname"><span class="pre">calc_fitness_students</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">students</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">goal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficient</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/model_utils.html#calc_fitness_students"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.model_utils.calc_fitness_students" title="Link to this definition"></a></dt>
+<dd><p>Method to calculate the fitness of students used in a solution</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>students</strong> (<em>np.array</em>) – array with the students of projects for all years</p></li>
+<li><p><strong>goal</strong> (<em>float</em>) – parameter with the goal for students</p></li>
+<li><p><strong>coefficient</strong> (<em>float</em>) – Parameter that gives weight to the fitness</p></li>
+</ul>
+</dd>
+<dt class="field-even">Usage<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<p>self.calc_fitness_students(students,20, 0.25)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.array: fitness of students</p>
+</dd>
+</dl>
+<p>:rtype np.array</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.model_utils.calc_fitness_vpn">
+<span class="sig-prename descclassname"><span class="pre">utils.model_utils.</span></span><span class="sig-name descname"><span class="pre">calc_fitness_vpn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vpn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">goal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficient</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/model_utils.html#calc_fitness_vpn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.model_utils.calc_fitness_vpn" title="Link to this definition"></a></dt>
+<dd><p>Method to calculate the fitness of vpn used in a solution</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vpn</strong> (<em>np.array</em>) – array with the vpn of projects for all years</p></li>
+<li><p><strong>goal</strong> (<em>float</em>) – parameter with the goal for vpn</p></li>
+<li><p><strong>coefficient</strong> (<em>float</em>) – Parameter that gives weight to the fitness</p></li>
+</ul>
+</dd>
+<dt class="field-even">Usage<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<p>self.calc_fitness_vpn(vpn,20, 0.25)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.array: fitness of vpn</p>
+</dd>
+</dl>
+<p>:rtype np.array</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.model_utils.calc_fitness_water">
+<span class="sig-prename descclassname"><span class="pre">utils.model_utils.</span></span><span class="sig-name descname"><span class="pre">calc_fitness_water</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">water</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actual</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficient</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/model_utils.html#calc_fitness_water"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.model_utils.calc_fitness_water" title="Link to this definition"></a></dt>
+<dd><p>Method to calculate the fitness of water used in a solution</p>
+<dl class="field-list simple">
+<dt class="field-odd">Usage<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<p>self.penalize_water(water, 0.25)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>water</strong> (<em>np.array</em>) – array with the quantity of water for all years</p></li>
+<li><p><strong>actual</strong> (<em>float</em>) – Actual value present in the model config</p></li>
+<li><p><strong>coefficient</strong> (<em>float</em>) – Parameter that gives weight to the fitness</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.array: fitness of water for each year</p>
+</dd>
+</dl>
+<p>:rtype np.array</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.model_utils.check_capex">
+<span class="sig-prename descclassname"><span class="pre">utils.model_utils.</span></span><span class="sig-name descname"><span class="pre">check_capex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mutant</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df_projects</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df_semi_mandatory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mandatory_capex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actives_off</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/model_utils.html#check_capex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.model_utils.check_capex" title="Link to this definition"></a></dt>
+<dd><p>Function to check capex restriction, in this function the array is passed by reference because of this
+it is modified here without the need of returning it</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>mutant:
+df_projects:
+df_semi_mandatory:
+mandatory_capex:
+actives_off:
+config:</p>
+</dd>
+</dl>
+<p>Returns:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mutant</strong> (<em>np.array</em>) – np.array containing the portafolio to be checked</p></li>
+<li><p><strong>df_projects</strong> (<em>DataFrame</em>) – df containing projects</p></li>
+<li><p><strong>df_semi_mandatory</strong> (<em>DataFrame</em>) – df containing semi mandatory projects</p></li>
+<li><p><strong>mandatory_capex</strong> (<em>np.array</em>) – np.array containing the mandatory capex for each year</p></li>
+<li><p><strong>actives_off</strong> (<em>np.array</em>) – np.array actives with basic off</p></li>
+<li><p><strong>config</strong> (<em>dictionary</em>) – dictionary containing configs</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.model_utils.check_isa">
+<span class="sig-prename descclassname"><span class="pre">utils.model_utils.</span></span><span class="sig-name descname"><span class="pre">check_isa</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mutant</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indexes_isa</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/model_utils.html#check_isa"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.model_utils.check_isa" title="Link to this definition"></a></dt>
+<dd><p>Function to check ISA restriction, in this function the array is passed by reference bacause of this
+it is modified here without the need of returning it</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mutant</strong> (<em>np.array</em>) – np.array containing the portafolio to be checked</p></li>
+<li><p><strong>indexes_isa</strong> (<em>np.array</em>) – np.array containing index location of ISA projects</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.model_utils.check_length">
+<span class="sig-prename descclassname"><span class="pre">utils.model_utils.</span></span><span class="sig-name descname"><span class="pre">check_length</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/model_utils.html#check_length"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.model_utils.check_length" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.model_utils.filter_projects">
+<span class="sig-prename descclassname"><span class="pre">utils.model_utils.</span></span><span class="sig-name descname"><span class="pre">filter_projects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zero_restriction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase_restriction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">be_restriction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/model_utils.html#filter_projects"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.model_utils.filter_projects" title="Link to this definition"></a></dt>
+<dd><p>Function to get different dataframes from the input data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>Dictionary</em>) – DataFrame with the input data</p></li>
+<li><p><strong>zero_restriction</strong> (<em>bool</em>) – bool that indicates if zero restriction is on or off</p></li>
+<li><p><strong>phase_restriction</strong> (<em>bool</em>) – bool that indicates if phase restriction is on or off</p></li>
+<li><p><strong>config</strong> (<em>Dictionary</em>) – Dictionary containing configs from excel and json</p></li>
+<li><p><strong>params</strong> (<em>Dictionary</em>) – Dictionary containing configs from BI</p></li>
+</ul>
+</dd>
+</dl>
+<p>:return
+DataFrame: DataFrame with the projects to be evaluated
+DataFrame: DataFrame with the projects with vpn negative or zero
+DataFrame: DataFrame with the mandatory projects for every portfolio
+DataFrame: DataFrame with the semi mandatory projects for every portfolio</p>
+<p>:rtype tuple(DataFrame, DataFrame, DataFrame, DataFrame)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.model_utils.generate_initial_population">
+<span class="sig-prename descclassname"><span class="pre">utils.model_utils.</span></span><span class="sig-name descname"><span class="pre">generate_initial_population</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sol_per_pop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_genes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df_semi_mandatory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isa_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mandatory_capex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/model_utils.html#generate_initial_population"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.model_utils.generate_initial_population" title="Link to this definition"></a></dt>
+<dd><p>Funcion that creates an initial population given the solutions per population, number of genes
+and the data. All the basic projects will be set to one, and the capex restriction is met from the start
+:param sol_per_pop: solutions per population
+:type df: int
+:param num_genes: number of genes
+:type df: int
+:param df: data containing projects
+:type df: DataFrame
+:param df_semi_mandatory: data containing semi_mandatory projects
+:type df_semi_mandatory: DataFrame
+:param isa_index: array containing index of ISA projects
+:type isa_index: np.array
+:param mandatory_capex: array containing mandatory capex
+:type mandatory_capex: np.array
+:param config: Dictionary containing configurations
+:type config: Dictionary</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np array containing the population</p>
+</dd>
+</dl>
+<p>:rtype np.array</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.model_utils.get_basic_index">
+<span class="sig-prename descclassname"><span class="pre">utils.model_utils.</span></span><span class="sig-name descname"><span class="pre">get_basic_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/model_utils.html#get_basic_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.model_utils.get_basic_index" title="Link to this definition"></a></dt>
+<dd><p>Function to return the index of the projects in which the column EMPRESA equals ISA
+:param df: df containing the projects
+:type df: DataFrame</p>
+<dl class="field-list simple">
+<dt class="field-odd">Usage<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<p>indexes_isa(df)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Index of the projects</p>
+</dd>
+</dl>
+<p>:rtype np.array</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.model_utils.get_capex_portfolio">
+<span class="sig-prename descclassname"><span class="pre">utils.model_utils.</span></span><span class="sig-name descname"><span class="pre">get_capex_portfolio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/model_utils.html#get_capex_portfolio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.model_utils.get_capex_portfolio" title="Link to this definition"></a></dt>
+<dd><p>Function to get the params per year of a portfolio</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>DataFrame</em>) – Pandas.DataFrame with the projects to extract the param values</p></li>
+<li><p><strong>config</strong> (<em>Dictionary</em>) – Dictionary containing different configs</p></li>
+</ul>
+</dd>
+<dt class="field-even">Usage<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<p>get_capex_portfolio(df,config)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+<p>numpy.array: array of capex value for each year
+:rtype np.array</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.model_utils.get_down_projects_params">
+<span class="sig-prename descclassname"><span class="pre">utils.model_utils.</span></span><span class="sig-name descname"><span class="pre">get_down_projects_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_down</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/model_utils.html#get_down_projects_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.model_utils.get_down_projects_params" title="Link to this definition"></a></dt>
+<dd><p>Function that gets downstream refineries attributes
+:param df_down: df containing info about refineries
+:type df_down: DataFrame
+:param initial: Tells if this is an initial run where down and mid are not considered or if it is a normal execution
+:type initial: bool
+:param config: Dictionary containing config of model
+:type config: Dictionary</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>attributes of the refineries by year</p>
+</dd>
+</dl>
+<p>:rtype tuple(np.array, np.array, np.array, np.array, np.array)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.model_utils.get_flujo_portfolio">
+<span class="sig-prename descclassname"><span class="pre">utils.model_utils.</span></span><span class="sig-name descname"><span class="pre">get_flujo_portfolio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/model_utils.html#get_flujo_portfolio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.model_utils.get_flujo_portfolio" title="Link to this definition"></a></dt>
+<dd><p>Function to get the flow per year of a portfolio</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>DataFrame</em>) – Pandas.DataFrame with the projects to extract the param values</p></li>
+<li><p><strong>config</strong> (<em>Dictionary</em>) – Dictionary containing different configs</p></li>
+</ul>
+</dd>
+<dt class="field-even">Usage<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<p>get_flujo_portfolio(df,config)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+<p>numpy.array: array of flow value for each year
+:rtype np.array</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.model_utils.get_indexes_isa">
+<span class="sig-prename descclassname"><span class="pre">utils.model_utils.</span></span><span class="sig-name descname"><span class="pre">get_indexes_isa</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/model_utils.html#get_indexes_isa"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.model_utils.get_indexes_isa" title="Link to this definition"></a></dt>
+<dd><p>Function to return the index of the projects in which the column EMPRESA equals ISA</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>DataFrame</em>) – df containing the projects</p>
+</dd>
+<dt class="field-even">Usage<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<p>indexes_isa(df)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Index of the projects</p>
+</dd>
+</dl>
+<p>:rtype np.array</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.model_utils.get_indexes_turn_off">
+<span class="sig-prename descclassname"><span class="pre">utils.model_utils.</span></span><span class="sig-name descname"><span class="pre">get_indexes_turn_off</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actives</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/model_utils.html#get_indexes_turn_off"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.model_utils.get_indexes_turn_off" title="Link to this definition"></a></dt>
+<dd><p>Function to return the index of the projects which basics are off</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>DataFrame</em>) – df containing the projects</p></li>
+<li><p><strong>actives</strong> (<em>np.array</em>) – array with the actives off</p></li>
+</ul>
+</dd>
+<dt class="field-even">Usage<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<p>indexes_turn_off(df, actives)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Index of the projects</p>
+</dd>
+</dl>
+<p>:rtype np.array</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.model_utils.get_mid_projects_params">
+<span class="sig-prename descclassname"><span class="pre">utils.model_utils.</span></span><span class="sig-name descname"><span class="pre">get_mid_projects_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_mid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/model_utils.html#get_mid_projects_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.model_utils.get_mid_projects_params" title="Link to this definition"></a></dt>
+<dd><p>Function that gets midstream attributes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df_mid</strong> (<em>DataFrame</em>) – df containing info about mid</p></li>
+<li><p><strong>initial</strong> (<em>bool</em>) – Tells if this is an initial run where down and mid are not considered or if it is a normal execution</p></li>
+<li><p><strong>config</strong> (<em>Dictionary</em>) – Dictionary containing config of model</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>attributes of the mid by year</p>
+</dd>
+</dl>
+<p>:rtype tuple(np.array, np.array, np.array, np.array, np.array)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.model_utils.get_off_actives">
+<span class="sig-prename descclassname"><span class="pre">utils.model_utils.</span></span><span class="sig-name descname"><span class="pre">get_off_actives</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">portfolio</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/model_utils.html#get_off_actives"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.model_utils.get_off_actives" title="Link to this definition"></a></dt>
+<dd><p>Function to get the actives with basic off</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>DataFrame</em>) – DataFrame with the projects to extract the off projects</p></li>
+<li><p><strong>portfolio</strong> (<em>list</em>) – list with 1 and 0 that represent projects on or off</p></li>
+</ul>
+</dd>
+<dt class="field-even">Usage<span class="colon">:</span></dt>
+<dd class="field-even"><p>get_off_actives(df, portfolio)</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array with actives which basic are off in the portfolio</p>
+</dd>
+</dl>
+<p>:rtype np.array</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.model_utils.get_project_params">
+<span class="sig-prename descclassname"><span class="pre">utils.model_utils.</span></span><span class="sig-name descname"><span class="pre">get_project_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/model_utils.html#get_project_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.model_utils.get_project_params" title="Link to this definition"></a></dt>
+<dd><p>Function to get the params per year of a portfolio</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>DataFrame</em>) – Pandas.DataFrame with the projects to extract the param values</p></li>
+<li><p><strong>config</strong> (<em>Dictionary</em>) – Dictionary containing different configs</p></li>
+</ul>
+</dd>
+<dt class="field-even">Usage<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<p>get_project_params(df,18)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+<p>numpy.array: array of vpn value for each year
+numpy.array: array of water value for each year
+numpy.array: array of co2 value for each year
+numpy.array: array of energy value for each year
+numpy.array: array of ebidta value for each year
+numpy.array: array of ebidta value for low emission projects for each year
+numpy.array: array of global nation for each year</p>
+<p>:rtype tuple(np.array, np.array, np.array, np.array, np.array, np.array, np.array)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.model_utils.get_projects">
+<span class="sig-prename descclassname"><span class="pre">utils.model_utils.</span></span><span class="sig-name descname"><span class="pre">get_projects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">portfolio</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/model_utils.html#get_projects"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.model_utils.get_projects" title="Link to this definition"></a></dt>
+<dd><p>Function to get a dataframe with the projects to leave on</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>DataFrame</em>) – Pandas.DataFrame with the projects considered</p></li>
+<li><p><strong>portfolio</strong> (<em>list</em>) – list of projects on or off</p></li>
+</ul>
+</dd>
+<dt class="field-even">Usage<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<p>get_projects(df,[0,1])</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+<p>Pandas.DataFrame: Dataframe with the data of the projects selected in the portfolio
+:rtype Dataframe</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.model_utils.get_semi_mandatory_on">
+<span class="sig-prename descclassname"><span class="pre">utils.model_utils.</span></span><span class="sig-name descname"><span class="pre">get_semi_mandatory_on</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actives</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/model_utils.html#get_semi_mandatory_on"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.model_utils.get_semi_mandatory_on" title="Link to this definition"></a></dt>
+<dd><p>Function to get the projects on phase 4 that are on in the portfolio</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>DataFrame</em>) – df containing the projects of phase 4</p></li>
+<li><p><strong>actives</strong> (<em>np.array</em>) – array with the actives off</p></li>
+</ul>
+</dd>
+<dt class="field-even">Usage<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<p>get_semi_mandatory_on(df, actives)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame of projects on</p>
+</dd>
+</dl>
+<p>:rtype DataFrame</p>
+</dd></dl>
+
+</section>
+<section id="module-utils">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-utils" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Cristiam_accenture.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

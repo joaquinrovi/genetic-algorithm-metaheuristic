@@ -1,0 +1,113 @@
+{
+    "plp": {
+      "dbfs_path": "/dbfs/FileStore/ESMModel/bronze/PLP.xlsx",
+      "upstream_config": {
+        "upstream": "Upstream",
+        "columns": [
+          {
+            "column_name": "Matricula Digital"
+          }
+        ],
+        "activo_upstream": "Activo Upstream",
+        "downstream": "Downstream",
+        "activo_downstream": "Activo Downstream",
+        "midstream": "Midstream",
+        "activo_midstream": "Activo Midstream",
+        "aacorp": "AACORP",
+        "bajas_emisiones": "Bajas Emisiones"
+      },
+      "bajas_emisiones_config": {
+        "bajas_emisiones": "Bajas Emisiones"
+      },
+      "trans_vias_config": {
+        "trans_vias": "Trans & Vías"
+      }
+    },
+    "crudos_portafolio": {
+      "dbfs_path_crudos": "/dbfs/FileStore/ESMModel/bronze/Formato_PEEP_Crudos_Portafolio_2023.xlsx",
+      "precios_config": {
+        "sheet_name1": "Offset Calidad",
+        "sheet_name2": "Offset Transporte tarifa costo",
+        "sheet_name3": "Pas. mol. dil. tarifa costo",
+        "sheet_name4": "Precio neto (con tarifa costo)"
+      }
+    },
+    "crudos_hocol": {
+      "dbfs_path_crudos_hocol": "/dbfs/FileStore/ESMModel/bronze/Formato_PEEP_Crudos_Hocol_Portafolio_2023.xlsx",
+      "precios_config": {
+        "sheet_name1": "Offset Calidad",
+        "sheet_name2": "Offset Transporte tarifa costo",
+        "sheet_name3": "Paseo molecular dil. tari costo"
+      }
+    },
+    "crudos_gas": {
+      "dbfs_path_crudos_gas": "/dbfs/FileStore/ESMModel/bronze/Formato_PEEP_GAS_Portafolio_2023_ECP.xlsx",
+      "precios_config": {
+        "sheet": "Precio Neto Básica"
+      }
+    },
+    "crudos_portafolio_hocol": {
+      "dbfs_path_crudos_hocol":"/dbfs/FileStore/ESMModel/bronze/Formato_PEEP_Crudos_Hocol_Portafolio_2023.xlsx",
+      "precios_config":{
+        "sheet_name1":"Offset Calidad",
+        "sheet_name2":"Offset Transporte MME",
+        "sheet_name3":"Offset Transporte tarifa costo",
+        "sheet_name4":"Precio neto (con MME)",
+        "sheet_name5":"Precio neto (con tarifa costo)"
+        }
+      },
+    "gas_portafolio_hocol":{
+      "dbfs_path_gas_portafolio_hocol":"/dbfs/FileStore/ESMModel/bronze/Formato_PEEP_GAS_Portafolio_2023_Hocol.xlsx",
+      "precios_config": {
+        "sheet":"Precio Neto Básica"
+      }
+    },
+      "precios_internacionales":{
+        "dbfs_path_crudos_internacionales":"/dbfs/FileStore/ESMModel/bronze/Formato_PEEP_Crudos_Internacionales_Portafolio_2023.xlsx",
+        "precios_config": {
+          "sheet":"Precios"
+      }
+    },
+    "factores_de_dilucion": {
+      "dbfs_path_dilucion": "/dbfs/FileStore/ESMModel/bronze/Factores_de_dilución.xlsx",
+      "dilucion_config": {
+        "sheet_name1": "Factor de dilución"
+      }
+    },
+    "intensidad": {
+      "dbfs_path_intensidad": "/dbfs/FileStore/ESMModel/bronze/INTENSIDAD_DE_EMISIONES_DE_CO2E.xlsx",
+      "intensidad_config": {
+        "sheet_name1": "upstream"
+      }
+    },
+    "blancos": {
+      "dbfs_path_blancos": "/dbfs/FileStore/ESMModel/bronze/Formato_PEEP_NGL_Portafolio_2023.xlsx",
+      "precios_config": {
+        "sheet_name1": "Precio neto tarifa costo"
+      }
+    },
+    "flujo_caja_upstream": {
+      "dbfs_path_flujo_caja_upstream": "/dbfs/FileStore/ESMModel/gold/flujo_caja_upstream.xlsx",
+      "precios_config": {
+        "sheet_1": "Sheet1"
+      }
+    },
+    "plp_downstream": {
+      "dbfs_path_plp_downstream": "/dbfs/FileStore/ESMModel/gold/plp_downstream.xlsx",
+      "plp_downstream_config": {
+        "sheet_1": "Sheet1"
+      }
+    },
+    "portafolios": {
+      "dbfs_path_portafolios": "/dbfs/FileStore/ESMModel/gold/portafolio.xlsx",
+      "portafolios_config": {
+        "sheet_name1": "Sheet1"
+      }
+    },
+      "midstream_proyectos":{
+      "dbfs_path_midstream": "/dbfs/FileStore/ESMModel/gold/flujo_caja_midstream.xlsx",
+      "midstream_config":{
+        "sheet_name1":"Sheet1"
+      }
+    }
+}

@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>axis.axis &mdash; Modelo_portafolio 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Modelo_portafolio
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Modelo_portafolio</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">axis.axis</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for axis.axis</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">goals</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;CAMBIO_CLIMATICO&quot;</span><span class="p">,</span>  <span class="c1"># 0</span>
+    <span class="s2">&quot;GESTION_INTEGRAL_DEL_AGUA&quot;</span><span class="p">,</span>  <span class="c1"># 1</span>
+    <span class="s2">&quot;ENERGIAS_RENOVABLES&quot;</span><span class="p">,</span>  <span class="c1"># 2</span>
+    <span class="s2">&quot;NEGOCIOS_DE_BAJAS_EMISIONES&quot;</span><span class="p">,</span>  <span class="c1"># 3</span>
+    <span class="s2">&quot;EBITDA_META&quot;</span><span class="p">,</span>  <span class="c1"># 4</span>
+    <span class="s2">&quot;TRANSFERENCIAS_A_LA_NACION&quot;</span><span class="p">,</span>  <span class="c1"># 5</span>
+    <span class="s2">&quot;DEUDA&quot;</span><span class="p">,</span>  <span class="c1"># 6</span>
+    <span class="s2">&quot;VPN&quot;</span><span class="p">,</span>  <span class="c1"># 7</span>
+    <span class="s2">&quot;CT+I&quot;</span><span class="p">,</span>  <span class="c1"># 8</span>
+    <span class="s2">&quot;EMPLEOS_NO_PETROLEROS&quot;</span><span class="p">,</span>  <span class="c1"># 9</span>
+    <span class="s2">&quot;ESTUDIANTES&quot;</span><span class="p">,</span>  <span class="c1"># 10</span>
+    <span class="s2">&quot;AGUA_POTABLE&quot;</span><span class="p">,</span>  <span class="c1"># 11</span>
+    <span class="s2">&quot;GAS_NATURAL&quot;</span><span class="p">,</span>  <span class="c1"># 12</span>
+    <span class="s2">&quot;KM_META&quot;</span><span class="p">,</span>  <span class="c1"># 13</span>
+<span class="p">]</span>
+
+<span class="n">usecols</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;MATRICULA_DIGITAL&quot;</span><span class="p">,</span>  <span class="c1"># 0</span>
+    <span class="s2">&quot;FASE_EN_CURSO&quot;</span><span class="p">,</span>  <span class="c1"># 1</span>
+    <span class="s2">&quot;MW_INCORPORADOS&quot;</span><span class="p">,</span>  <span class="c1"># 2</span>
+    <span class="s2">&quot;RANGO_ANIO&quot;</span><span class="p">,</span>  <span class="c1"># 3</span>
+    <span class="s2">&quot;EBITDA&quot;</span><span class="p">,</span>  <span class="c1"># 4</span>
+    <span class="s2">&quot;EMISIONES_NETAS_CO2_ALCANCE_1_Y_2&quot;</span><span class="p">,</span>  <span class="c1"># 5</span>
+    <span class="s2">&quot;AGUA_NEUTRALIDAD&quot;</span><span class="p">,</span>  <span class="c1"># 6</span>
+    <span class="s2">&quot;CAPEX&quot;</span><span class="p">,</span>  <span class="c1"># 7</span>
+    <span class="s2">&quot;TOTAL_R_NACION&quot;</span><span class="p">,</span>  <span class="c1"># 8</span>
+    <span class="s2">&quot;DIVIDENDO&quot;</span><span class="p">,</span>  <span class="c1"># 9</span>
+    <span class="s2">&quot;IMPUESTOS&quot;</span><span class="p">,</span>  <span class="c1"># 10</span>
+    <span class="s2">&quot;ANIO_INICIAL&quot;</span><span class="p">,</span>  <span class="c1"># 11</span>
+    <span class="s2">&quot;ANIO_FINAL&quot;</span><span class="p">,</span>  <span class="c1"># 12</span>
+    <span class="s2">&quot;VPN_PLP_CALCULADO&quot;</span><span class="p">,</span>  <span class="c1"># 13</span>
+    <span class="s2">&quot;NOMBRE_PROYECTO&quot;</span><span class="p">,</span>  <span class="c1"># 14</span>
+    <span class="s2">&quot;LINEA_DE_NEGOCIO&quot;</span><span class="p">,</span>  <span class="c1"># 15</span>
+    <span class="s2">&quot;EBIT&quot;</span><span class="p">,</span>  <span class="c1"># 16</span>
+    <span class="s2">&quot;CAPITAL_EMPLEADO&quot;</span><span class="p">,</span>  <span class="c1"># 17</span>
+    <span class="s2">&quot;TIPO_DE_INVERSION&quot;</span><span class="p">,</span>  <span class="c1"># 18</span>
+    <span class="s2">&quot;OPCION_ESTRATEGICA&quot;</span><span class="p">,</span>  <span class="c1"># 19</span>
+    <span class="s2">&quot;FLUJO_CAJA&quot;</span><span class="p">,</span>  <span class="c1"># 20</span>
+    <span class="s2">&quot;ACTIVO&quot;</span><span class="p">,</span>  <span class="c1"># 21</span>
+    <span class="s2">&quot;EMPRESA&quot;</span><span class="p">,</span>  <span class="c1"># 22</span>
+    <span class="s2">&quot;SEGMENTO&quot;</span><span class="p">,</span>  <span class="c1"># 23</span>
+    <span class="s2">&quot;EMPLEOS_NP&quot;</span><span class="p">,</span>  <span class="c1"># 24</span>
+    <span class="s2">&quot;ESTUDIANTES&quot;</span><span class="p">,</span>  <span class="c1"># 25</span>
+    <span class="s2">&quot;ACCESO_AGUA_POTABLE&quot;</span><span class="p">,</span>  <span class="c1"># 26</span>
+    <span class="s2">&quot;ACCESO_GAS&quot;</span><span class="p">,</span>  <span class="c1"># 27</span>
+    <span class="s2">&quot;KM&quot;</span><span class="p">,</span>  <span class="c1"># 28</span>
+    <span class="s2">&quot;APORTE_EBITDA_ACUM_2040_PROYECTOS_ASOCIADOS_A_CTI&quot;</span><span class="p">,</span>  <span class="c1"># 29</span>
+    <span class="s2">&quot;PORTAFOLIO&quot;</span><span class="p">,</span>  <span class="c1"># 30</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="Axis">
+<a class="viewcode-back" href="../../axis.html#axis.axis.Axis">[docs]</a>
+<span class="k">class</span> <span class="nc">Axis</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is a  class, to calculate metrics per project, the sostec and finance axis</span>
+
+<span class="sd">    :Usage:</span>
+
+<span class="sd">    from axis.axis import Axis</span>
+
+<span class="sd">    axis_instance = Axis(df_input,parameters)</span>
+<span class="sd">    axis_instance.axis()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df_up</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Class constructor where all the data is read,</span>
+
+<span class="sd">        :param df_up: dataframe with the projects to calculate axis and metrics</span>
+<span class="sd">        :param parameters: dataframe with downstream base projects</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">params</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">goals_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="o">-</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;emisiones_netas_co2_alcance_1_y_2_actual&quot;</span><span class="p">],</span>
+                <span class="o">-</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;neutralidad_agua_actual&quot;</span><span class="p">],</span>
+                <span class="n">params</span><span class="p">[</span><span class="s2">&quot;mwh_goal&quot;</span><span class="p">],</span>
+                <span class="n">params</span><span class="p">[</span><span class="s2">&quot;low_emissions_min&quot;</span><span class="p">],</span>
+                <span class="n">params</span><span class="p">[</span><span class="s2">&quot;ebitda_min&quot;</span><span class="p">],</span>
+                <span class="n">params</span><span class="p">[</span><span class="s2">&quot;trans_nacion_min&quot;</span><span class="p">],</span>
+                <span class="mi">1</span> <span class="o">/</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;deuda_bruta_ratio&quot;</span><span class="p">],</span>
+                <span class="mi">1</span><span class="p">,</span>
+                <span class="n">params</span><span class="p">[</span><span class="s2">&quot;cti_min&quot;</span><span class="p">],</span>
+                <span class="n">params</span><span class="p">[</span><span class="s2">&quot;not_oil_jobs_goal&quot;</span><span class="p">],</span>
+                <span class="n">params</span><span class="p">[</span><span class="s2">&quot;students_goal&quot;</span><span class="p">],</span>
+                <span class="n">params</span><span class="p">[</span><span class="s2">&quot;agua_potable_actual&quot;</span><span class="p">],</span>
+                <span class="n">params</span><span class="p">[</span><span class="s2">&quot;natural_gas_actual&quot;</span><span class="p">],</span>
+                <span class="n">params</span><span class="p">[</span><span class="s2">&quot;km_actual&quot;</span><span class="p">],</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">debt</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;debt&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__calc_metrics_proyect_year</span><span class="p">(</span><span class="n">df_up</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__calc_metrics_proyect_year</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method calculate the metrics per year and project</span>
+<span class="sd">        that can be calculated without portfolios</span>
+<span class="sd">        :param df: DataFrame with the projects per year information</span>
+<span class="sd">        :return: DataFrame with the metrics per year and project</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">debt_anio</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">debt</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">17</span><span class="p">))</span>
+        <span class="n">water_metric</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">6</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;neutralidad_agua_actual&quot;</span><span class="p">])</span>
+
+        <span class="n">co2_metric</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">5</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+            <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;emisiones_netas_co2_alcance_1_y_2_actual&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="n">energy_metric</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;mwh_goal&quot;</span><span class="p">]</span>
+
+        <span class="n">ebitda_metric</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">4</span><span class="p">]]</span> <span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;ebitda_min&quot;</span><span class="p">]</span>
+
+        <span class="n">global_nation</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">8</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span> <span class="o">+</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">9</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span> <span class="o">+</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">10</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="n">gn_metric</span> <span class="o">=</span> <span class="n">global_nation</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;trans_nacion_min&quot;</span><span class="p">]</span>
+
+        <span class="n">le_ebitda</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">15</span><span class="p">]]</span> <span class="o">==</span> <span class="s2">&quot;Bajas Emisiones&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+            <span class="p">:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+        <span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+
+        <span class="n">gross_metric</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;deuda_bruta_ratio&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">4</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+        <span class="p">)</span> <span class="o">/</span> <span class="n">debt_anio</span>
+
+        <span class="n">cti_metric</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">29</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;cti_min&quot;</span><span class="p">]</span>
+
+        <span class="n">noj_metric</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">24</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;not_oil_jobs_goal&quot;</span><span class="p">]</span>
+
+        <span class="n">students_metric</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">25</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;students_goal&quot;</span><span class="p">]</span>
+
+        <span class="n">potable_water_metric</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">26</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;agua_potable_actual&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="n">gas_metric</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">27</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;natural_gas_actual&quot;</span><span class="p">]</span>
+
+        <span class="n">km_metric</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">28</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;km_actual&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">30</span><span class="p">]]</span> <span class="o">==</span> <span class="s2">&quot;PORTAFOLIO_CASO_BASE&quot;</span><span class="p">):</span>
+            <span class="n">capex</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">capex</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">7</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+
+        <span class="n">vpn</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="n">usecols</span><span class="p">[</span><span class="mi">13</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;vpn_goal&quot;</span><span class="p">]</span>
+        <span class="n">df2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="n">usecols</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+                <span class="n">usecols</span><span class="p">[</span><span class="mi">14</span><span class="p">]:</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">14</span><span class="p">]],</span>
+                <span class="n">usecols</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">3</span><span class="p">]],</span>
+                <span class="n">usecols</span><span class="p">[</span><span class="mi">11</span><span class="p">]:</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">11</span><span class="p">]],</span>
+                <span class="n">usecols</span><span class="p">[</span><span class="mi">12</span><span class="p">]:</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">12</span><span class="p">]],</span>
+                <span class="n">goals</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">co2_metric</span><span class="p">,</span>
+                <span class="n">goals</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="n">water_metric</span><span class="p">,</span>
+                <span class="n">goals</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">energy_metric</span><span class="p">,</span>
+                <span class="s2">&quot;EBITDA_BAJAS_EMISIONES&quot;</span><span class="p">:</span> <span class="n">le_ebitda</span><span class="p">,</span>
+                <span class="n">goals</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="n">ebitda_metric</span><span class="p">,</span>
+                <span class="n">goals</span><span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="n">gn_metric</span><span class="p">,</span>
+                <span class="n">goals</span><span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="n">gross_metric</span><span class="p">,</span>
+                <span class="n">goals</span><span class="p">[</span><span class="mi">7</span><span class="p">]:</span> <span class="n">vpn</span><span class="p">,</span>
+                <span class="n">usecols</span><span class="p">[</span><span class="mi">16</span><span class="p">]:</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">16</span><span class="p">]],</span>
+                <span class="n">usecols</span><span class="p">[</span><span class="mi">17</span><span class="p">]:</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">17</span><span class="p">]],</span>
+                <span class="n">goals</span><span class="p">[</span><span class="mi">8</span><span class="p">]:</span> <span class="n">cti_metric</span><span class="p">,</span>
+                <span class="n">goals</span><span class="p">[</span><span class="mi">9</span><span class="p">]:</span> <span class="n">noj_metric</span><span class="p">,</span>
+                <span class="n">goals</span><span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="n">students_metric</span><span class="p">,</span>
+                <span class="n">goals</span><span class="p">[</span><span class="mi">11</span><span class="p">]:</span> <span class="n">potable_water_metric</span><span class="p">,</span>
+                <span class="n">goals</span><span class="p">[</span><span class="mi">12</span><span class="p">]:</span> <span class="n">gas_metric</span><span class="p">,</span>
+                <span class="n">goals</span><span class="p">[</span><span class="mi">13</span><span class="p">]:</span> <span class="n">km_metric</span><span class="p">,</span>
+                <span class="n">usecols</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">4</span><span class="p">]],</span>
+                <span class="n">usecols</span><span class="p">[</span><span class="mi">13</span><span class="p">]:</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">13</span><span class="p">]],</span>
+                <span class="n">usecols</span><span class="p">[</span><span class="mi">18</span><span class="p">]:</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">18</span><span class="p">]],</span>
+                <span class="n">usecols</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+                <span class="n">usecols</span><span class="p">[</span><span class="mi">7</span><span class="p">]:</span> <span class="n">capex</span><span class="p">,</span>
+                <span class="n">usecols</span><span class="p">[</span><span class="mi">20</span><span class="p">]:</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">20</span><span class="p">]],</span>
+                <span class="n">usecols</span><span class="p">[</span><span class="mi">30</span><span class="p">]:</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">30</span><span class="p">]],</span>
+                <span class="n">usecols</span><span class="p">[</span><span class="mi">21</span><span class="p">]:</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">21</span><span class="p">]],</span>
+                <span class="n">usecols</span><span class="p">[</span><span class="mi">22</span><span class="p">]:</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">22</span><span class="p">]],</span>
+                <span class="n">usecols</span><span class="p">[</span><span class="mi">19</span><span class="p">]:</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">19</span><span class="p">]],</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+
+        <span class="n">df2</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">df2</span>
+
+<div class="viewcode-block" id="Axis.get_outputs">
+<a class="viewcode-back" href="../../axis.html#axis.axis.Axis.get_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df_results</span><span class="p">):</span>
+        <span class="n">df_project_goals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">project_goals_initial_metrics</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">):</span>  <span class="c1"># range is number of portfolios generated by model</span>
+            <span class="c1"># filter projects on</span>
+            <span class="n">projects</span> <span class="o">=</span> <span class="n">df_results</span><span class="o">.</span><span class="n">MATRICULA_DIGITAL</span><span class="p">[</span>
+                <span class="n">df_results</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="sa">f</span><span class="s2">&quot;PORTAFOLIO_</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;bool&quot;</span><span class="p">)</span>
+            <span class="p">]</span>
+
+            <span class="c1"># get goals of the portfolio</span>
+            <span class="n">df_goals_portfolio</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+                <span class="n">left</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">,</span>
+                <span class="n">right</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_metrics_depend_projects_on</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="n">projects</span><span class="p">),</span>
+                <span class="n">how</span><span class="o">=</span><span class="s2">&quot;inner&quot;</span><span class="p">,</span>
+                <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="n">usecols</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">3</span><span class="p">]],</span>
+            <span class="p">)</span>
+
+            <span class="c1"># goals per proyect of specific portfolio</span>
+            <span class="n">projects_goals_add</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">project_goals_depend_on_portfolio</span><span class="p">(</span>
+                <span class="n">df_goals_portfolio</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">df_project_goals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+                <span class="n">left</span><span class="o">=</span><span class="n">df_project_goals</span><span class="p">,</span>
+                <span class="n">right</span><span class="o">=</span><span class="n">projects_goals_add</span><span class="p">,</span>
+                <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
+                <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="n">usecols</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">df_axis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="n">df_project_goals</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">df_project_goals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+                <span class="n">left</span><span class="o">=</span><span class="n">df_project_goals</span><span class="p">,</span>
+                <span class="n">right</span><span class="o">=</span><span class="n">df_axis</span><span class="p">,</span>
+                <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
+                <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="n">usecols</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># end for</span>
+
+        <span class="k">return</span> <span class="n">df_project_goals</span></div>
+
+
+<div class="viewcode-block" id="Axis.get_metrics_depend_projects_on">
+<a class="viewcode-back" href="../../axis.html#axis.axis.Axis.get_metrics_depend_projects_on">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_metrics_depend_projects_on</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">projects</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function calculate the metrics that depend on the projects of a portfolio</span>
+<span class="sd">        :param df: DataFrame with the metrics per year and project to add the new metrics</span>
+<span class="sd">        :param projects: list with the &#39;MATRICULA_DIGITAL&#39; of projects from a portfolio</span>
+<span class="sd">        :return: DataFrame with additional metrics per year and project</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">df2</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">projects</span><span class="p">)]</span>
+        <span class="n">df_range</span> <span class="o">=</span> <span class="n">df2</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+            <span class="p">(</span><span class="n">df2</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">3</span><span class="p">]]</span> <span class="o">&gt;=</span> <span class="n">df2</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">11</span><span class="p">]])</span>
+            <span class="o">&amp;</span> <span class="p">(</span><span class="n">df2</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">3</span><span class="p">]]</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="n">df2</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">12</span><span class="p">]]))</span>
+        <span class="p">]</span>
+        <span class="n">df_group</span> <span class="o">=</span> <span class="n">df_range</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">usecols</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+
+        <span class="n">ebitda_year</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">df_group</span><span class="p">[</span><span class="n">usecols</span><span class="p">[</span><span class="mi">4</span><span class="p">]]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;low_emissions_min&quot;</span><span class="p">]</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span><span class="n">df2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">17</span><span class="p">)</span>
+        <span class="n">le_metric</span> <span class="o">=</span> <span class="n">df2</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s2">&quot;EBITDA_BAJAS_EMISIONES&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="n">ebitda_year</span><span class="p">)</span>
+
+        <span class="n">df3</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="n">usecols</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">df2</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+                <span class="n">usecols</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">df2</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">3</span><span class="p">]],</span>
+                <span class="n">goals</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">le_metric</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">df3</span></div>
+
+
+<div class="viewcode-block" id="Axis.project_goals_initial_metrics">
+<a class="viewcode-back" href="../../axis.html#axis.axis.Axis.project_goals_initial_metrics">[docs]</a>
+    <span class="k">def</span> <span class="nf">project_goals_initial_metrics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function calculate the goals per project in the initial operation</span>
+<span class="sd">        :param df: DataFrame with metrics per year and project</span>
+<span class="sd">        :return: DataFrame with goals per projects</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">df_range</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+            <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">3</span><span class="p">]]</span> <span class="o">&gt;=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">11</span><span class="p">]])</span>
+            <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">3</span><span class="p">]]</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">12</span><span class="p">]]))</span>
+            <span class="o">&amp;</span> <span class="p">(</span>
+                <span class="o">~</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span>
+                    <span class="p">[</span><span class="s2">&quot;grc-PORTAFOLIO_CASO_BASE&quot;</span><span class="p">,</span> <span class="s2">&quot;grb-PORTAFOLIO_CASO_BASE&quot;</span><span class="p">]</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="n">cols</span> <span class="o">=</span> <span class="n">goals</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">goals</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span> <span class="o">+</span> <span class="n">goals</span><span class="p">[</span><span class="mi">7</span><span class="p">:]</span>
+
+        <span class="k">if</span> <span class="n">column</span> <span class="o">==</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">matricula_not_duration</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+                <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">11</span><span class="p">]]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">12</span><span class="p">]]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">),</span>
+                <span class="n">usecols</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+            <span class="n">df_not_duration</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="n">usecols</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">matricula_not_duration</span><span class="p">})</span>
+            <span class="n">df_range</span><span class="p">[</span><span class="n">cols</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_range</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">cols</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mi">100</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="n">df_range</span><span class="p">[</span><span class="n">goals</span><span class="p">[</span><span class="mi">6</span><span class="p">]]</span> <span class="o">=</span> <span class="n">df_range</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="n">goals</span><span class="p">[</span><span class="mi">6</span><span class="p">]]</span> <span class="o">*</span> <span class="p">(</span><span class="mi">3</span><span class="o">/</span><span class="mi">100</span><span class="p">)</span>
+            <span class="n">df_temp</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">usecols</span><span class="p">[</span><span class="mi">0</span><span class="p">])[[</span><span class="n">usecols</span><span class="p">[</span><span class="mi">19</span><span class="p">],</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">21</span><span class="p">]]]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+            <span class="p">)</span>
+        <span class="n">cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">goals</span><span class="p">[</span><span class="mi">6</span><span class="p">])</span>
+        <span class="n">df2</span> <span class="o">=</span> <span class="n">df_range</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="n">usecols</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">column</span><span class="p">])[</span><span class="n">cols</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+
+        <span class="n">df_group</span> <span class="o">=</span> <span class="n">df2</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">column</span><span class="p">)</span>
+
+        <span class="n">df2</span> <span class="o">=</span> <span class="n">df_group</span><span class="p">[</span><span class="n">goals</span><span class="p">[:</span><span class="mi">3</span><span class="p">]]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="n">df3</span> <span class="o">=</span> <span class="n">df_group</span><span class="p">[</span><span class="n">goals</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">8</span><span class="p">]]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="n">cti</span> <span class="o">=</span> <span class="n">df_group</span><span class="p">[</span><span class="n">goals</span><span class="p">[</span><span class="mi">8</span><span class="p">]]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="n">df4</span> <span class="o">=</span> <span class="n">df_group</span><span class="p">[</span><span class="n">goals</span><span class="p">[</span><span class="mi">9</span><span class="p">:]]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+        <span class="n">df5</span> <span class="o">=</span> <span class="n">df3</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">df5</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df5</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">goals</span><span class="p">[</span><span class="mi">5</span><span class="p">]]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># Finance axle</span>
+        <span class="n">finance_axle_cols</span> <span class="o">=</span> <span class="n">goals</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span>
+        <span class="n">finance_axle</span> <span class="o">=</span> <span class="n">df5</span><span class="p">[</span><span class="n">finance_axle_cols</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">4</span>
+        <span class="n">finance_axle</span><span class="p">[</span><span class="n">finance_axle</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">finance_axle</span><span class="p">[</span><span class="n">finance_axle</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">df_goals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">df2</span><span class="p">,</span>
+                <span class="n">df3</span><span class="p">,</span>
+                <span class="n">cti</span><span class="o">.</span><span class="n">to_frame</span><span class="p">(),</span>
+                <span class="n">df4</span><span class="p">,</span>
+                <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;EJE_FINANCIERO&quot;</span><span class="p">:</span> <span class="n">finance_axle</span><span class="p">}),</span>
+            <span class="p">],</span>
+            <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">df_goals</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">column</span> <span class="o">==</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">df_goals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df_goals</span><span class="p">,</span> <span class="n">df_not_duration</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span>
+                <span class="mi">0</span>
+            <span class="p">)</span>
+            <span class="n">df_goals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+                <span class="n">left</span><span class="o">=</span><span class="n">df_goals</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="n">df_temp</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="n">usecols</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;inner&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">df_goals</span><span class="p">[</span><span class="n">goals</span><span class="p">[:</span><span class="mi">2</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">df_goals</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">goals</span><span class="p">[:</span><span class="mi">2</span><span class="p">]]</span>
+
+        <span class="k">return</span> <span class="n">df_goals</span></div>
+
+
+<div class="viewcode-block" id="Axis.project_goals_depend_on_portfolio">
+<a class="viewcode-back" href="../../axis.html#axis.axis.Axis.project_goals_depend_on_portfolio">[docs]</a>
+    <span class="k">def</span> <span class="nf">project_goals_depend_on_portfolio</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function calculate the project goals that depend on portfolio</span>
+<span class="sd">        :param df: DataFrame with metrics per year and project</span>
+<span class="sd">        :param i: portfolio number in which goals are calculated</span>
+<span class="sd">        :return: DataFrame with goals per projects</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">df_range</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+            <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">3</span><span class="p">]]</span> <span class="o">&gt;=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">11</span><span class="p">]])</span>
+            <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">3</span><span class="p">]]</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">usecols</span><span class="p">[</span><span class="mi">12</span><span class="p">]]))</span>
+        <span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">df_range</span><span class="p">[</span><span class="n">goals</span><span class="p">[</span><span class="mi">3</span><span class="p">]]</span> <span class="o">=</span> <span class="n">df_range</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="n">goals</span><span class="p">[</span><span class="mi">3</span><span class="p">]]</span> <span class="o">*</span> <span class="p">(</span><span class="mi">100</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">df2</span> <span class="o">=</span> <span class="n">df_range</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="n">usecols</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span><span class="n">column</span><span class="p">])[</span><span class="n">goals</span><span class="p">[</span><span class="mi">3</span><span class="p">]]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+
+        <span class="n">df_group</span> <span class="o">=</span> <span class="n">df_range</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">column</span><span class="p">)</span>
+
+        <span class="n">le</span> <span class="o">=</span> <span class="n">df_group</span><span class="p">[</span><span class="n">goals</span><span class="p">[</span><span class="mi">3</span><span class="p">]]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="c1"># roace = df_group[goals[7]].mean()</span>
+
+        <span class="n">df2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="n">column</span><span class="p">:</span> <span class="n">df_range</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">(),</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">goals</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">le</span><span class="p">,</span>
+                <span class="c1"># f&quot;{goals[7]}_{i}&quot;: roace,</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">df2</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Axis.axis">
+<a class="viewcode-back" href="../../axis.html#axis.axis.Axis.axis">[docs]</a>
+    <span class="k">def</span> <span class="nf">axis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function calculate the project axis of a portfolio</span>
+<span class="sd">        :param df: DataFrame with metrics per project</span>
+<span class="sd">        :param i: portfolio number in which goals are calculated</span>
+<span class="sd">        :return: DataFrame with axis per project</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># sostec axle per project</span>
+        <span class="n">sostec_axle_cols</span> <span class="o">=</span> <span class="n">goals</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">goals</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+        <span class="n">sostec_axle</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">sostec_axle_cols</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">4</span>
+        <span class="n">sostec_axle</span><span class="p">[</span><span class="n">sostec_axle</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">sostec_axle</span><span class="p">[</span><span class="n">sostec_axle</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># create dataframe output</span>
+        <span class="n">df2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="n">column</span><span class="p">:</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">column</span><span class="p">],</span>
+                <span class="sa">f</span><span class="s2">&quot;EJE_SOSTEC_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">sostec_axle</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">df2</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Cristiam_accenture.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

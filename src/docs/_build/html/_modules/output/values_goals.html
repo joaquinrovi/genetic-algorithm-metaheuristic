@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>output.values_goals &mdash; Modelo_portafolio 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Modelo_portafolio
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Modelo_portafolio</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">output.values_goals</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for output.values_goals</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span>
+
+<span class="kn">from</span> <span class="nn">utils.model_utils</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">calc_fitness_water</span><span class="p">,</span>
+    <span class="n">calc_fitness_co2</span><span class="p">,</span>
+    <span class="n">calc_fitness_energy</span><span class="p">,</span>
+    <span class="n">calc_fitness_ebitda</span><span class="p">,</span>
+    <span class="n">calc_fitness_low_emissions</span><span class="p">,</span>
+    <span class="n">calc_fitness_global_nation</span><span class="p">,</span>
+    <span class="n">calc_fitness_gross</span><span class="p">,</span>
+    <span class="n">calc_fitness_cti</span><span class="p">,</span>
+    <span class="n">calc_fitness_not_oil_jobs</span><span class="p">,</span>
+    <span class="n">calc_fitness_students</span><span class="p">,</span>
+    <span class="n">calc_fitness_km</span><span class="p">,</span>
+    <span class="n">calc_fitness_access_water</span><span class="p">,</span>
+    <span class="n">calc_fitness_access_gas</span><span class="p">,</span>
+    <span class="n">calc_fitness_vpn</span>
+<span class="p">)</span>
+
+<div class="viewcode-block" id="ValuesGoals">
+<a class="viewcode-back" href="../../output.html#output.values_goals.ValuesGoals">[docs]</a>
+<span class="k">class</span> <span class="nc">ValuesGoals</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class to get the values and goals of a certain portfolio</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">results</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">pb_parameters</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor of ValuesGoals class, here several configurations are read as well as the data needed</span>
+
+<span class="sd">        :param data: Data that includes all projects taken into account by the model</span>
+<span class="sd">        :type data: DataFrame</span>
+<span class="sd">        :param results: The six portfolios produced by the model</span>
+<span class="sd">        :type results: DataFrame</span>
+<span class="sd">        :param config: Config from the model, including model_config.json and excel configurations</span>
+<span class="sd">        :type config: Dictionary</span>
+<span class="sd">        :param pb_parameters: Config entered from powerBI</span>
+<span class="sd">        :type pb_parameters: Dictionary</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pb_parameters</span> <span class="o">=</span> <span class="n">pb_parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;PORTAFOLIO&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s2">&quot;portafolio_1&quot;</span><span class="p">,</span> <span class="s2">&quot;portafolio_2&quot;</span><span class="p">,</span><span class="s2">&quot;portafolio_3&quot;</span><span class="p">,</span><span class="s2">&quot;portafolio_4&quot;</span><span class="p">,</span><span class="s2">&quot;portafolio_5&quot;</span><span class="p">,</span><span class="s2">&quot;portafolio_6&quot;</span><span class="p">])]</span>
+        <span class="c1"># self.data[&quot;APORTE_EBITDA_ACUM_2040_PROYECTOS_ASOCIADOS_A_CTI&quot;] = 40 / self.data.shape[0]</span>
+        <span class="c1"># self.data[&quot;EMPLEOS_NP&quot;] = 460 / self.data.shape[0]</span>
+        <span class="c1"># self.data[&quot;ESTUDIANTES&quot;] = 4 / self.data.shape[0]</span>
+        <span class="c1"># self.data[&quot;ACCESO_AGUA_POTABLE&quot;] = 40 / self.data.shape[0]</span>
+        <span class="c1"># self.data[&quot;ACCESO_GAS&quot;] = 460 / self.data.shape[0]</span>
+        <span class="c1"># self.data[&quot;KM&quot;] = 4 / self.data.shape[0]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">results</span> <span class="o">=</span> <span class="n">results</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;1. Cambio climatico&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;2. Gestion integral del agua&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;3. Energia renovables&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;4. Negocios de bajas emisiones&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;5. EBITDA&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;6. Transferencias a la nacion&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;7. DEUDA&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8. CTI&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;9. EMPLEOS_NO_PETROLEROS&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;10. ESTUDIANTES&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;11. Agua potable&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;12. Gas Natural&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;13. Km&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;14. VPN&quot;</span>
+        <span class="p">]</span>
+        <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">down_base_capex</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">down_base_ebitda</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">down_base_emissions</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">down_base_global</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">down_base_flow</span>
+        <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_down_projects_params</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">])</span>
+
+
+<div class="viewcode-block" id="ValuesGoals.get_output">
+<a class="viewcode-back" href="../../output.html#output.values_goals.ValuesGoals.get_output">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_output</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method that returns the values and goals of the portfolios created by the model</span>
+
+<span class="sd">        :return: df_values, df_goals: dataframes containing goals and values</span>
+<span class="sd">        :rtype: tuple(DataFrame, DataFrame)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">df_goals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_results_table</span><span class="p">()</span>
+        <span class="n">df_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_results_table</span><span class="p">()</span>
+        <span class="n">df_axis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_axis_table</span><span class="p">()</span>
+        <span class="n">sostec_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">finan_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">):</span>
+            <span class="n">portfolio_label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;PORTAFOLIO_</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">portfolio</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;PORTAFOLIO_</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;MATRICULA_DIGITAL&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_portfolio_values</span><span class="p">(</span><span class="n">portfolio</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">down_base_ebitda</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">down_base_emissions</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">down_base_global</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">goals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_goals</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+            <span class="n">values_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="n">values</span><span class="p">)))</span>
+            <span class="n">goal_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="n">goals</span><span class="p">)))</span>
+            <span class="n">axis_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_axis</span><span class="p">(</span><span class="n">goals</span><span class="p">)</span>
+            <span class="n">sostec_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">axis_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">finan_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">axis_list</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">df_goals</span><span class="p">[</span><span class="n">portfolio_label</span><span class="p">]</span> <span class="o">=</span> <span class="n">goal_list</span>
+            <span class="n">df_values</span><span class="p">[</span><span class="n">portfolio_label</span><span class="p">]</span> <span class="o">=</span> <span class="n">values_list</span>
+        <span class="n">df_axis</span><span class="p">[</span><span class="s2">&quot;Sostec&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sostec_list</span>
+        <span class="n">df_axis</span><span class="p">[</span><span class="s2">&quot;Finan&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">finan_list</span>
+        <span class="k">return</span> <span class="n">df_values</span><span class="p">,</span> <span class="n">df_goals</span><span class="p">,</span> <span class="n">df_axis</span></div>
+
+
+<div class="viewcode-block" id="ValuesGoals.get_portfolio_values">
+<a class="viewcode-back" href="../../output.html#output.values_goals.ValuesGoals.get_portfolio_values">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_portfolio_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">portfolio</span><span class="p">,</span> <span class="n">down_base_ebitda</span><span class="p">,</span> <span class="n">down_base_emissions</span><span class="p">,</span> <span class="n">down_base_global</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method that gets the values of a certain portfolio</span>
+<span class="sd">        :param portfolio: portfolios given by the model</span>
+<span class="sd">        :type portfolio: DataFrame</span>
+<span class="sd">        :param down_base_ebitda: values of ebitda in down</span>
+<span class="sd">        :type down_base_ebitda: np.Array</span>
+<span class="sd">        :param down_base_emissions:  values of low_emissions in down</span>
+<span class="sd">        :type down_base_emissions: np.Array</span>
+<span class="sd">        :param down_base_global: values of global_nation in down</span>
+<span class="sd">        :type down_base_global: np.Array</span>
+
+<span class="sd">        :return: list containing the values</span>
+<span class="sd">        :rtype: list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">df_range</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;RANGO_ANIO&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;ANIO_INICIAL&#39;</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;RANGO_ANIO&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;ANIO_INICIAL&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;DURACION&#39;</span><span class="p">]))])</span>
+        <span class="n">portfolio_projects</span> <span class="o">=</span> <span class="n">df_range</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df_range</span><span class="p">[</span><span class="s1">&#39;MATRICULA_DIGITAL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">portfolio</span><span class="p">)]</span>
+        <span class="n">portfolio_low</span> <span class="o">=</span> <span class="n">portfolio_projects</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">portfolio_projects</span><span class="p">[</span><span class="s1">&#39;LINEA_DE_NEGOCIO&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Bajas Emisiones&#39;</span><span class="p">)</span><span class="o">|</span>
+                                                 <span class="p">(</span><span class="n">portfolio_projects</span><span class="p">[</span><span class="s1">&#39;LINEA_DE_NEGOCIO&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Transmisión y Vías&#39;</span><span class="p">)]</span>
+        <span class="n">portfolio_cti</span> <span class="o">=</span> <span class="n">portfolio_projects</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">portfolio_projects</span><span class="p">[</span><span class="s1">&#39;SEGMENTO&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Corporativo&#39;</span><span class="p">)]</span>
+
+        <span class="n">portfolio_low_year</span> <span class="o">=</span> <span class="n">portfolio_low</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;RANGO_ANIO&#39;</span><span class="p">)</span>
+        <span class="n">portfolio_year</span> <span class="o">=</span> <span class="n">portfolio_projects</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;RANGO_ANIO&#39;</span><span class="p">)</span>
+        <span class="n">portfolio_cti_year</span> <span class="o">=</span> <span class="n">portfolio_cti</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;RANGO_ANIO&#39;</span><span class="p">)</span>
+
+        <span class="n">water</span> <span class="o">=</span> <span class="p">(</span><span class="n">portfolio_year</span><span class="p">[</span><span class="s1">&#39;AGUA_NEUTRALIDAD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+        <span class="n">co2</span> <span class="o">=</span> <span class="p">((</span><span class="n">portfolio_year</span><span class="p">[</span><span class="s1">&#39;EMISIONES_NETAS_CO2_ALCANCE_1_Y_2&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span> <span class="o">+</span>
+               <span class="n">down_base_emissions</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+        <span class="n">energy</span> <span class="o">=</span> <span class="p">(</span><span class="n">portfolio_year</span><span class="p">[</span><span class="s1">&#39;MW_INCORPORADOS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+        <span class="n">ebitda</span> <span class="o">=</span> <span class="p">((</span><span class="n">portfolio_year</span><span class="p">[</span><span class="s1">&#39;EBITDA&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span> <span class="o">+</span> <span class="n">down_base_ebitda</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+        <span class="n">low_emissions</span> <span class="o">=</span> <span class="p">(</span><span class="n">portfolio_low_year</span><span class="p">[</span><span class="s1">&#39;EBITDA&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+        <span class="n">global_nation</span> <span class="o">=</span> <span class="p">(((</span><span class="n">portfolio_year</span><span class="p">[</span><span class="s1">&#39;TOTAL_R_NACION&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span> <span class="o">+</span>
+                         <span class="p">(</span><span class="n">portfolio_year</span><span class="p">[</span><span class="s1">&#39;IMPUESTOS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span> <span class="o">+</span>
+                         <span class="p">(</span><span class="n">portfolio_year</span><span class="p">[</span><span class="s1">&#39;DIVIDENDO&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()))</span> <span class="o">+</span> <span class="n">down_base_global</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+        <span class="n">debt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;debt&#39;</span><span class="p">],</span>
+            <span class="n">ebitda</span><span class="p">,</span>
+            <span class="n">out</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">ebitda</span><span class="p">),</span>
+            <span class="n">where</span><span class="o">=</span><span class="n">ebitda</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">low_emissions</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">low_emissions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">])</span>
+
+        <span class="c1"># cti = (potafolio_year[&#39;APORTE_EBITDA_ACUM_2040_PROYECTOS_ASOCIADOS_A_CTI&#39;].sum()).to_numpy()</span>
+        <span class="n">cti</span> <span class="o">=</span> <span class="p">(</span><span class="n">portfolio_cti_year</span><span class="p">[</span><span class="s1">&#39;EBITDA&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cti</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">cti</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">])</span>
+        <span class="n">not_oil_jobs</span> <span class="o">=</span> <span class="p">(</span><span class="n">portfolio_year</span><span class="p">[</span><span class="s1">&#39;EMPLEOS_NP&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+        <span class="n">students</span> <span class="o">=</span> <span class="p">(</span><span class="n">portfolio_year</span><span class="p">[</span><span class="s1">&#39;ESTUDIANTES&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+        <span class="n">access_water</span> <span class="o">=</span> <span class="p">(</span><span class="n">portfolio_year</span><span class="p">[</span><span class="s1">&#39;ACCESO_AGUA_POTABLE&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+        <span class="n">access_gas</span> <span class="o">=</span> <span class="p">(</span><span class="n">portfolio_year</span><span class="p">[</span><span class="s1">&#39;ACCESO_GAS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+        <span class="n">km</span> <span class="o">=</span> <span class="p">(</span><span class="n">portfolio_year</span><span class="p">[</span><span class="s1">&#39;KM&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+        <span class="n">vpn</span> <span class="o">=</span> <span class="n">portfolio_year</span><span class="p">[</span><span class="s2">&quot;VPN_PLP_CALCULADO&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">co2</span><span class="p">,</span> <span class="n">water</span><span class="p">,</span> <span class="n">energy</span><span class="p">,</span> <span class="n">low_emissions</span><span class="p">,</span> <span class="n">ebitda</span><span class="p">,</span> <span class="n">global_nation</span><span class="p">,</span> <span class="n">debt</span><span class="p">,</span> <span class="n">cti</span><span class="p">,</span> <span class="n">not_oil_jobs</span><span class="p">,</span> <span class="n">students</span><span class="p">,</span> <span class="n">access_water</span><span class="p">,</span> <span class="n">access_gas</span><span class="p">,</span> <span class="n">km</span><span class="p">,</span> <span class="n">vpn</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="ValuesGoals.get_goals">
+<a class="viewcode-back" href="../../output.html#output.values_goals.ValuesGoals.get_goals">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_goals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method that gets the goals of a certain portfolio</span>
+<span class="sd">        :param values: values obtained from a certain portfolio</span>
+<span class="sd">        :type values: list</span>
+
+<span class="sd">        :return: list containing the goals for the entered values</span>
+<span class="sd">        :rtype: list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">water</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">calc_fitness_water</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">pb_parameters</span><span class="p">[</span><span class="s2">&quot;neutralidad_agua_actual&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">co2</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">calc_fitness_co2</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">pb_parameters</span><span class="p">[</span><span class="s2">&quot;emisiones_netas_co2_alcance_1_y_2_actual&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">energy</span> <span class="o">=</span> <span class="n">calc_fitness_energy</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">pb_parameters</span><span class="p">[</span><span class="s2">&quot;mwh_goal&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">ebitda</span> <span class="o">=</span> <span class="n">calc_fitness_ebitda</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">pb_parameters</span><span class="p">[</span><span class="s2">&quot;ebitda_min&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">low_emissions</span> <span class="o">=</span> <span class="n">calc_fitness_low_emissions</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">values</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">pb_parameters</span><span class="p">[</span><span class="s2">&quot;low_emissions_min&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">global_nation</span> <span class="o">=</span> <span class="n">calc_fitness_global_nation</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">pb_parameters</span><span class="p">[</span><span class="s2">&quot;trans_nacion_min&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">debt</span> <span class="o">=</span> <span class="n">calc_fitness_gross</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;debt&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">pb_parameters</span><span class="p">[</span><span class="s2">&quot;deuda_bruta_ratio&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">cti</span> <span class="o">=</span> <span class="n">calc_fitness_cti</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">pb_parameters</span><span class="p">[</span><span class="s2">&quot;cti_min&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">not_oil_jobs</span> <span class="o">=</span> <span class="n">calc_fitness_not_oil_jobs</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">pb_parameters</span><span class="p">[</span><span class="s2">&quot;not_oil_jobs_goal&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">students</span> <span class="o">=</span> <span class="n">calc_fitness_students</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">pb_parameters</span><span class="p">[</span><span class="s2">&quot;students_goal&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">access_water</span> <span class="o">=</span> <span class="n">calc_fitness_access_water</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">pb_parameters</span><span class="p">[</span><span class="s2">&quot;agua_potable_actual&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">access_gas</span> <span class="o">=</span> <span class="n">calc_fitness_access_gas</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">pb_parameters</span><span class="p">[</span><span class="s2">&quot;natural_gas_actual&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">km</span> <span class="o">=</span> <span class="n">calc_fitness_km</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">12</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">pb_parameters</span><span class="p">[</span><span class="s2">&quot;km_actual&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">vpn</span> <span class="o">=</span> <span class="n">calc_fitness_vpn</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">pb_parameters</span><span class="p">[</span><span class="s2">&quot;vpn_goal&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">co2</span><span class="p">,</span> <span class="n">water</span><span class="p">,</span> <span class="n">energy</span><span class="p">,</span> <span class="n">low_emissions</span><span class="p">,</span> <span class="n">ebitda</span><span class="p">,</span> <span class="n">global_nation</span><span class="p">,</span> <span class="n">debt</span><span class="p">,</span> <span class="n">cti</span><span class="p">,</span> <span class="n">not_oil_jobs</span><span class="p">,</span> <span class="n">students</span><span class="p">,</span> <span class="n">access_water</span><span class="p">,</span> <span class="n">access_gas</span><span class="p">,</span> <span class="n">km</span><span class="p">,</span> <span class="n">vpn</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="ValuesGoals.get_axis">
+<a class="viewcode-back" href="../../output.html#output.values_goals.ValuesGoals.get_axis">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_axis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">goals</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method to get sostec and finan axis per portfolio</span>
+
+<span class="sd">        :param goals: goals obtained from a certain portfolio</span>
+<span class="sd">        :type goals: list</span>
+
+<span class="sd">        :return: list containing the sostec and finan axis</span>
+<span class="sd">        :rtype: list</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">average</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">goals</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">average</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">average</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">average</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">average</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">average</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">sostec</span> <span class="o">=</span> <span class="p">(</span><span class="n">average</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">average</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">average</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">average</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span><span class="o">/</span><span class="mi">4</span>
+        <span class="n">finan</span> <span class="o">=</span> <span class="p">(</span><span class="n">average</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">+</span> <span class="n">average</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="n">average</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">+</span> <span class="n">average</span><span class="p">[</span><span class="mi">13</span><span class="p">])</span><span class="o">/</span><span class="mi">4</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">sostec</span><span class="p">,</span> <span class="n">finan</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="ValuesGoals.get_down_projects_params">
+<a class="viewcode-back" href="../../output.html#output.values_goals.ValuesGoals.get_down_projects_params">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_down_projects_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df_down</span><span class="p">,</span> <span class="n">num_years</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function that gets downstream refineries attributes</span>
+
+<span class="sd">        :param df_down: df containing info about refineries</span>
+<span class="sd">        :type df_down: DataFrame</span>
+<span class="sd">        :param num_years: the number of years taken into account by the model</span>
+<span class="sd">        :type num_years: int</span>
+
+<span class="sd">        :return: attributes of the refineries by year</span>
+<span class="sd">        :rtype: tuple(np.Array, np.Array, np.Array, np.Array, np.Array)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;MATRICULA_DIGITAL&#39;</span><span class="p">,</span>
+                   <span class="s2">&quot;EBITDA&quot;</span><span class="p">,</span>
+                   <span class="s2">&quot;CAPEX&quot;</span><span class="p">,</span>
+                   <span class="s2">&quot;EMISIONES_NETAS_CO2_ALCANCE_1_Y_2&quot;</span><span class="p">,</span>
+                   <span class="s2">&quot;FLUJO_CAJA&quot;</span><span class="p">,</span>
+                   <span class="s2">&quot;DIVIDENDO&quot;</span><span class="p">,</span>
+                   <span class="s2">&quot;IMPUESTOS&quot;</span><span class="p">,</span>
+                   <span class="s2">&quot;LINEA_DE_NEGOCIO&quot;</span><span class="p">,</span>
+                   <span class="s2">&quot;ACTIVO&quot;</span><span class="p">,</span>
+                   <span class="s2">&quot;EMPRESA&quot;</span><span class="p">,</span>
+                   <span class="s2">&quot;RANGO_ANIO&quot;</span><span class="p">,</span>
+                   <span class="s2">&quot;PORTAFOLIO&quot;</span>
+                   <span class="p">]</span>
+
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df_down</span><span class="p">[</span><span class="n">columns</span><span class="p">]</span>
+        <span class="n">emissions_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span> <span class="n">num_years</span><span class="p">))</span>
+        <span class="n">ebitda_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span> <span class="n">num_years</span><span class="p">))</span>
+        <span class="n">global_nation_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span> <span class="n">num_years</span><span class="p">))</span>
+        <span class="n">capex_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span> <span class="n">num_years</span><span class="p">))</span>
+        <span class="n">flow_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span> <span class="n">num_years</span><span class="p">))</span>
+        <span class="n">df_portfolios</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;PORTAFOLIO&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;portafolio_1&#39;</span><span class="p">],</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;PORTAFOLIO&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;portafolio_2&#39;</span><span class="p">],</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;PORTAFOLIO&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;portafolio_3&#39;</span><span class="p">],</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;PORTAFOLIO&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;portafolio_4&#39;</span><span class="p">],</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;PORTAFOLIO&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;portafolio_5&#39;</span><span class="p">],</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;PORTAFOLIO&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;portafolio_6&#39;</span><span class="p">]</span>
+        <span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">df_port</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">df_portfolios</span><span class="p">):</span>
+            <span class="n">df_year</span> <span class="o">=</span> <span class="n">df_port</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;RANGO_ANIO&#39;</span><span class="p">)</span>
+            <span class="n">emitions</span> <span class="o">=</span> <span class="n">df_year</span><span class="p">[</span><span class="s1">&#39;EMISIONES_NETAS_CO2_ALCANCE_1_Y_2&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+            <span class="n">ebitda</span> <span class="o">=</span> <span class="n">df_year</span><span class="p">[</span><span class="s1">&#39;EBITDA&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+            <span class="n">global_nation</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_year</span><span class="p">[</span><span class="s1">&#39;DIVIDENDO&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span> <span class="n">df_year</span><span class="p">[</span><span class="s1">&#39;IMPUESTOS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+            <span class="n">capex</span> <span class="o">=</span> <span class="n">df_year</span><span class="p">[</span><span class="s1">&#39;CAPEX&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+            <span class="n">flow</span> <span class="o">=</span> <span class="n">df_year</span><span class="p">[</span><span class="s1">&#39;FLUJO_CAJA&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+            <span class="n">emissions_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">emitions</span>
+            <span class="n">ebitda_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ebitda</span>
+            <span class="n">global_nation_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">global_nation</span>
+            <span class="n">capex_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">capex</span>
+            <span class="n">flow_arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">flow</span>
+
+        <span class="k">return</span> <span class="n">capex_arr</span><span class="p">,</span> <span class="n">ebitda_arr</span><span class="p">,</span> <span class="n">emissions_arr</span><span class="p">,</span> <span class="n">global_nation_arr</span><span class="p">,</span> <span class="n">flow_arr</span></div>
+
+
+<div class="viewcode-block" id="ValuesGoals.init_results_table">
+<a class="viewcode-back" href="../../output.html#output.values_goals.ValuesGoals.init_results_table">[docs]</a>
+    <span class="k">def</span> <span class="nf">init_results_table</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method that initialize the dataframe where the values or goals for each year will be saved.</span>
+
+<span class="sd">        :usage:</span>
+<span class="sd">            init_results_table([1,2])</span>
+
+<span class="sd">        :return: DataFrame with the values(names of variables) and years replicated</span>
+<span class="sd">        :rtype: Dataframe</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">year</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">i</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;start_year&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;start_year&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">])</span>
+        <span class="p">]</span>
+        <span class="n">valor</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;records_per_project&quot;</span><span class="p">])</span>
+        <span class="p">]</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;VALOR&quot;</span><span class="p">:</span> <span class="n">valor</span><span class="p">,</span>
+                <span class="s2">&quot;ANIO&quot;</span><span class="p">:</span> <span class="n">year</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ValuesGoals.init_axis_table">
+<a class="viewcode-back" href="../../output.html#output.values_goals.ValuesGoals.init_axis_table">[docs]</a>
+    <span class="k">def</span> <span class="nf">init_axis_table</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method that initialize the dataframe where the axis per Portfolio will be saved</span>
+
+<span class="sd">        :usage:</span>
+<span class="sd">            init_results_table([1,2])</span>
+
+<span class="sd">        :return: DataFrame with the values and years replicated</span>
+<span class="sd">        :rtype: Dataframe</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;PORTAFOLIO&quot;</span><span class="p">:</span>
+                    <span class="p">[</span><span class="s2">&quot;PORTAFOLIO_1&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;PORTAFOLIO_2&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;PORTAFOLIO_3&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;PORTAFOLIO_4&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;PORTAFOLIO_5&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;PORTAFOLIO_6&quot;</span><span class="p">]</span>
+            <span class="p">}</span>
+        <span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Cristiam_accenture.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

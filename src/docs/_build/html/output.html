@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>output package &mdash; Modelo_portafolio 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=8d563738"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Modelo_portafolio
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">output package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-output.values_goals">output.values_goals module</a><ul>
+<li><a class="reference internal" href="#output.values_goals.ValuesGoals"><code class="docutils literal notranslate"><span class="pre">ValuesGoals</span></code></a><ul>
+<li><a class="reference internal" href="#output.values_goals.ValuesGoals.get_axis"><code class="docutils literal notranslate"><span class="pre">ValuesGoals.get_axis()</span></code></a></li>
+<li><a class="reference internal" href="#output.values_goals.ValuesGoals.get_down_projects_params"><code class="docutils literal notranslate"><span class="pre">ValuesGoals.get_down_projects_params()</span></code></a></li>
+<li><a class="reference internal" href="#output.values_goals.ValuesGoals.get_goals"><code class="docutils literal notranslate"><span class="pre">ValuesGoals.get_goals()</span></code></a></li>
+<li><a class="reference internal" href="#output.values_goals.ValuesGoals.get_output"><code class="docutils literal notranslate"><span class="pre">ValuesGoals.get_output()</span></code></a></li>
+<li><a class="reference internal" href="#output.values_goals.ValuesGoals.get_portfolio_values"><code class="docutils literal notranslate"><span class="pre">ValuesGoals.get_portfolio_values()</span></code></a></li>
+<li><a class="reference internal" href="#output.values_goals.ValuesGoals.init_axis_table"><code class="docutils literal notranslate"><span class="pre">ValuesGoals.init_axis_table()</span></code></a></li>
+<li><a class="reference internal" href="#output.values_goals.ValuesGoals.init_results_table"><code class="docutils literal notranslate"><span class="pre">ValuesGoals.init_results_table()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-output">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Modelo_portafolio</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">output package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/output.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="output-package">
+<h1>output package<a class="headerlink" href="#output-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-output.values_goals">
+<span id="output-values-goals-module"></span><h2>output.values_goals module<a class="headerlink" href="#module-output.values_goals" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="output.values_goals.ValuesGoals">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">output.values_goals.</span></span><span class="sig-name descname"><span class="pre">ValuesGoals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">results</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pb_parameters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/output/values_goals.html#ValuesGoals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#output.values_goals.ValuesGoals" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class to get the values and goals of a certain portfolio</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="output.values_goals.ValuesGoals.get_axis">
+<span class="sig-name descname"><span class="pre">get_axis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">goals</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/output/values_goals.html#ValuesGoals.get_axis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#output.values_goals.ValuesGoals.get_axis" title="Link to this definition"></a></dt>
+<dd><p>Method to get sostec and finan axis per portfolio</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>goals</strong> (<em>list</em>) – goals obtained from a certain portfolio</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>list containing the sostec and finan axis</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="output.values_goals.ValuesGoals.get_down_projects_params">
+<span class="sig-name descname"><span class="pre">get_down_projects_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_down</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_years</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/output/values_goals.html#ValuesGoals.get_down_projects_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#output.values_goals.ValuesGoals.get_down_projects_params" title="Link to this definition"></a></dt>
+<dd><p>Function that gets downstream refineries attributes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df_down</strong> (<em>DataFrame</em>) – df containing info about refineries</p></li>
+<li><p><strong>num_years</strong> (<em>int</em>) – the number of years taken into account by the model</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>attributes of the refineries by year</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple(np.Array, np.Array, np.Array, np.Array, np.Array)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="output.values_goals.ValuesGoals.get_goals">
+<span class="sig-name descname"><span class="pre">get_goals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/output/values_goals.html#ValuesGoals.get_goals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#output.values_goals.ValuesGoals.get_goals" title="Link to this definition"></a></dt>
+<dd><p>Method that gets the goals of a certain portfolio
+:param values: values obtained from a certain portfolio
+:type values: list</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list containing the goals for the entered values</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="output.values_goals.ValuesGoals.get_output">
+<span class="sig-name descname"><span class="pre">get_output</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/output/values_goals.html#ValuesGoals.get_output"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#output.values_goals.ValuesGoals.get_output" title="Link to this definition"></a></dt>
+<dd><p>Method that returns the values and goals of the portfolios created by the model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>df_values, df_goals: dataframes containing goals and values</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple(DataFrame, DataFrame)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="output.values_goals.ValuesGoals.get_portfolio_values">
+<span class="sig-name descname"><span class="pre">get_portfolio_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">portfolio</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">down_base_ebitda</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">down_base_emissions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">down_base_global</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/output/values_goals.html#ValuesGoals.get_portfolio_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#output.values_goals.ValuesGoals.get_portfolio_values" title="Link to this definition"></a></dt>
+<dd><p>Method that gets the values of a certain portfolio
+:param portfolio: portfolios given by the model
+:type portfolio: DataFrame
+:param down_base_ebitda: values of ebitda in down
+:type down_base_ebitda: np.Array
+:param down_base_emissions:  values of low_emissions in down
+:type down_base_emissions: np.Array
+:param down_base_global: values of global_nation in down
+:type down_base_global: np.Array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list containing the values</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="output.values_goals.ValuesGoals.init_axis_table">
+<span class="sig-name descname"><span class="pre">init_axis_table</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/output/values_goals.html#ValuesGoals.init_axis_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#output.values_goals.ValuesGoals.init_axis_table" title="Link to this definition"></a></dt>
+<dd><p>Method that initialize the dataframe where the axis per Portfolio will be saved</p>
+<dl class="field-list simple">
+<dt class="field-odd">Usage<span class="colon">:</span></dt>
+<dd class="field-odd"><p>init_results_table([1,2])</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame with the values and years replicated</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dataframe</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="output.values_goals.ValuesGoals.init_results_table">
+<span class="sig-name descname"><span class="pre">init_results_table</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/output/values_goals.html#ValuesGoals.init_results_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#output.values_goals.ValuesGoals.init_results_table" title="Link to this definition"></a></dt>
+<dd><p>Method that initialize the dataframe where the values or goals for each year will be saved.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Usage<span class="colon">:</span></dt>
+<dd class="field-odd"><p>init_results_table([1,2])</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame with the values(names of variables) and years replicated</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dataframe</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-output">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-output" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Cristiam_accenture.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

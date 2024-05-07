@@ -1,0 +1,10 @@
+{
+  "records_per_project": 17,
+  "start_year": 2024,
+  "pygad": {
+    "num_parents_mating": 4,
+    "parent_selection_type": "tournament",
+    "keep_elitism": 5,
+    "crossover_type": "single_point"
+  }
+}

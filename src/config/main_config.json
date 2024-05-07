@@ -1,0 +1,8 @@
+{
+  "run_data_processing": false,
+  "run_model": false,
+  "db_name": "modelo_portafolio",
+  "config_path": "/dbfs/FileStore/ESMModel/bronze/config_job.xlsx",
+  "types_path": "/dbfs/FileStore/ESMModel/bronze/ESM_Datatype.xlsx",
+  "results_momento_2": "/dbfs/FileStore/ESMModel/bronze/simulacion.xlsx"
+}
